@@ -7,6 +7,9 @@ package game;
  * @author Adrian Kristanto
  */
 public class FancyMessage {
+    /**
+     * The Game title
+     */
     public static String GAME_TITLE = "`7MMF'     A     `7MF'`7MMF'`7MN.   `7MF'MMP\"\"MM\"\"YMM `7MM\"\"\"YMM  `7MM\"\"\"Mq.  \n" +
             "  `MA     ,MA     ,V    MM    MMN.    M  P'   MM   `7   MM    `7    MM   `MM. \n" +
             "   VM:   ,VVM:   ,V     MM    M YMb   M       MM        MM   d      MM   ,M9  \n" +
