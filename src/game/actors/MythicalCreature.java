@@ -1,11 +1,15 @@
 package game.actors;
 
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.capabilities.Status;
 import game.capabilities.StateChangeable;
 
+import java.util.ArrayList;
+
 public abstract class MythicalCreature extends Actor implements StateChangeable {
-    // counter to determine when to change state
-    int counter;
+    int statesIndexCounter = -1;
+    // A list of all possible states of this MythicalCreature
+    ArrayList<Status> statesList;
     /**
      * The constructor of the Actor class.
      *
@@ -16,6 +20,17 @@ public abstract class MythicalCreature extends Actor implements StateChangeable 
      */
     public MythicalCreature(String name, char displayChar, int hitPoints) {
         super(name, displayChar, hitPoints);
-        this.counter = 0;
+        this.statesList = new ArrayList<>();
+    }
+
+    @Override
+    public void changeState(Actor actor) {
+        // Statuses automatically remove itself once it is finished
+        // So if MythicalCreature don't have any state anymore, it is time to change state
+        if (this.statuses().isEmpty()) {
+            // Loops back to initial state after all state have been transversed
+            this.statesIndexCounter = (this.statesIndexCounter + 1) % this.statesList.size();
+            this.addStatus(statesList.get(this.statesIndexCounter));
+        }
     }
 }
