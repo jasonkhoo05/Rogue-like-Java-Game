@@ -64,9 +64,9 @@ public class Player extends Actor {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
-        System.out.println(this);
-        System.out.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
-        System.out.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
+        display.println(this.toString());
+        display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
+        display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
 
         // return/print the console menu
         Menu menu = new Menu(actions);
