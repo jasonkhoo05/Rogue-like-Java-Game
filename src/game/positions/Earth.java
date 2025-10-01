@@ -7,10 +7,7 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.DefaultGroundCreator;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.World;
-import game.actors.Bear;
-import game.actors.Deer;
-import game.actors.Player;
-import game.actors.Wolf;
+import game.actors.*;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
@@ -60,9 +57,10 @@ public class Earth extends World {
         this.addGameMap(gameMap);
 
         this.addPlayer(this.player, gameMap.at(22, 5));
-        gameMap.at(25,6).addActor(new Deer("Deer", 'd', 50));
+        gameMap.at(23,3).addActor(new Deer("Deer", 'd', 50));
         gameMap.at(0,0).addActor(new Wolf("Wolf", 'e', 100));
-        gameMap.at(3,3).addActor(new Bear("Bear", 'B', 200));
+        gameMap.at(23,4).addActor(new Bear("Bear", 'B', 200));
+        gameMap.at(23,5).addActor(new Unicorn("Unicorn", 'U', 1000));
     }
 
     /**
