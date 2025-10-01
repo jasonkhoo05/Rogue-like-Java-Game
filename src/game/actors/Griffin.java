@@ -19,9 +19,9 @@ public class Griffin extends MythicalCreature{
         this.setIntrinsicWeapon(new Claw());
 
         // Adding all the possible states of Griffin to the list of states for changeState to loop through
-        this.statesList.add(new Angry(this));
-        this.statesList.add(new Sleepy(this));
-        this.statesList.add(new Poisonous(this));
+//        this.statesList.add(new Angry(this));
+//        this.statesList.add(new Sleepy(this));
+//        this.statesList.add(new Poisonous(this));
     }
 
     @Override
