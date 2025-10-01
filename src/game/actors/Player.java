@@ -10,10 +10,13 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
+import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
 import game.weapons.BareFist;
+import game.weapons.PoweredBareFist;
 
 import java.util.ArrayList;
 
@@ -39,23 +42,24 @@ public class Player extends Actor {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.UPDATE, hydrationLevel);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.UPDATE, warmthLevel);
 
-        for (Item item : items){
+        for (Item item : items) {
             this.addItemToInventory(item);
         }
 
         this.enableAbility(Ability.CAN_ATTACK);
         this.enableAbility(Ability.HEALABLE);
+        this.enableAbility(Ability.IS_PLAYER);
 
     }
 
     /**
      * Select and return an action to perform on the current turn.
      *
-     * @param actions collection of possible Actions for this Actor
+     * @param actions    collection of possible Actions for this Actor
      * @param lastAction The Action this Actor took last turn. Can do
-     * interesting things in conjunction with Action.getNextAction()
-     * @param map the map containing the Actor
-     * @param display the I/O object to which messages may be written
+     *                   interesting things in conjunction with Action.getNextAction()
+     * @param map        the map containing the Actor
+     * @param display    the I/O object to which messages may be written
      * @return the Action to be performed
      */
     @Override
@@ -85,9 +89,10 @@ public class Player extends Actor {
 
     /**
      * Checks if player is still conscious
+     *
      * @return true if hydrationLevel > 1 and warmthLevel > 1; false otherwise
      */
-    public boolean isConscious(){
+    public boolean isConscious() {
         return super.isConscious() && this.getAttribute(PlayerAttribute.HYDRATION) > 1 && this.getAttribute(PlayerAttribute.WARMTH) > 1;
     }
 
@@ -96,14 +101,14 @@ public class Player extends Actor {
      * current Actor.
      *
      * @param otherActor the Actor that might be performing attack
-     * @param direction String representing the direction of the other Actor
-     * @param map current GameMap
+     * @param direction  String representing the direction of the other Actor
+     * @param map        current GameMap
      * @return A collection of Actions.
      */
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
-        if(otherActor.hasAbility(Ability.CAN_ATTACK)){
+        if (otherActor.hasAbility(Ability.CAN_ATTACK)) {
             actions.add(new AttackAction(this, direction));
         }
         return actions;
@@ -118,4 +123,30 @@ public class Player extends Actor {
         }
         this.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.DECREASE, damage);
     }
+
+//    @Override
+//    public IntrinsicWeapon getIntrinsicWeapon() {
+//        // If player has BOOST_DAMAGE, return the powered version
+//        if (this.hasAbility(Ability.BOOST_DAMAGE)) {
+//            return new PoweredBareFist();
+//        } else {
+//            return new BareFist();
+//        }
+//    }
+
+    @Override
+    public IntrinsicWeapon getIntrinsicWeapon() {
+        IntrinsicWeapon weapon;
+        if (this.hasAbility(Ability.BOOST_DAMAGE)) {
+            weapon = new PoweredBareFist();
+        } else {
+            weapon = new BareFist();
+        }
+
+        // DEBUG: print the type of weapon being returned
+        System.out.println(this + " intrinsic weapon is: " + weapon.getClass().getSimpleName());
+
+        return weapon;
+    }
+
 }
