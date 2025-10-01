@@ -5,6 +5,7 @@ import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation;
 import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
+import edu.monash.fit2099.engine.actors.attributes.BaseAttributes;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
@@ -43,6 +44,8 @@ public class Player extends Actor {
         }
 
         this.enableAbility(Ability.CAN_ATTACK);
+        this.enableAbility(Ability.HEALABLE);
+
     }
 
     /**
@@ -57,6 +60,13 @@ public class Player extends Actor {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+
+        if (this.hasAbility(Ability.RECEIVED_HEAL)) {
+            this.heal(5);
+            this.disableAbility(Ability.RECEIVED_HEAL);
+            display.println(this + " is healed by radiant energy!");
+        }
+
         // Handle multi-turn Actions
         if (lastAction.getNextAction() != null)
             return lastAction.getNextAction();
@@ -64,9 +74,9 @@ public class Player extends Actor {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
-        System.out.println(this);
-        System.out.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
-        System.out.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
+        display.println(this.toString());
+        display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
+        display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
 
         // return/print the console menu
         Menu menu = new Menu(actions);
@@ -97,5 +107,15 @@ public class Player extends Actor {
             actions.add(new AttackAction(this, direction));
         }
         return actions;
+    }
+
+    @Override
+    public void hurt(int damage) {
+        // If the actor is immune (from Aegis), skip damage
+        if (this.hasAbility(Ability.IMMUNITY)) {
+            System.out.println(this + " is shielded by Aegis and takes no damage!");
+            return;
+        }
+        this.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.DECREASE, damage);
     }
 }
