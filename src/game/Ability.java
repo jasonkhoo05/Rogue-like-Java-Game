@@ -16,4 +16,5 @@ public enum Ability
     RECEIVED_HEAL,
     IMMUNITY,
     BOOST_DAMAGE,
+    IS_PLAYER,
 }
