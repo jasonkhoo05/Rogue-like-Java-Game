@@ -43,7 +43,7 @@ public class Unicorn extends MythicalCreature {
         for (Status status : this.statuses()) {
             status.tickStatus(this, map.locationOf(this));
         }
-        changeState(this);
+        changeState(this,display);
 
 //        // Apply Vigor to Player only if Unicorn is in VIGOR state
 //        if (currentType == StatusType.VIGOR && player != null) {
@@ -73,7 +73,7 @@ public class Unicorn extends MythicalCreature {
 
 
     @Override
-    public void changeState(Actor actor) {
+    public void changeState(Actor actor, Display display) {
         if (statesList.isEmpty()) return;
 
         // If no state yet, start at index 0
@@ -92,7 +92,7 @@ public class Unicorn extends MythicalCreature {
 
 
         // Remove current state
-        this.removeStatus(currentState);
+//        this.removeStatus(currentState);
         System.out.println(currentType + " fades away.");
 
         // Find current index by class type
@@ -114,13 +114,13 @@ public class Unicorn extends MythicalCreature {
         currentType = statesList.get(nextIndex);
         currentState = createState(currentType);
         addStatus(currentState);
-        System.out.println("Transformed to " + currentType + " state!");
+        display.println("Transformed to " + currentType + " state!");
     }
 
     private Status createState(StatusType type) {
         return switch (type) {
-            case RADIANT -> new Radiant(1);
-            case AEGIS -> new Aegis(1);
+            case RADIANT -> new Radiant(5);
+            case AEGIS -> new Aegis(5);
             case VIGOR -> new Vigor(5);
         };
     }
