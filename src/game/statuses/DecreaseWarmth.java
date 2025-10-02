@@ -1,4 +1,3 @@
-// file: game/statuses/DecreaseWarmth.java
 package game.statuses;
 
 import edu.monash.fit2099.engine.GameEntity;
@@ -9,18 +8,21 @@ import edu.monash.fit2099.engine.actors.attributes.BaseAttributes;
 import edu.monash.fit2099.engine.positions.Location;
 import game.actors.attributes.AnimalAttribute;
 
-/** Decreases warmth by 1 each tick; when <= 0, mark unconscious via HEALTH=0. */
+/**
+ * Decrease animal warmth by 1 each tick.
+ * When warmth reaches 0, set HEALTH=0 so the engine marks the actor unconscious.
+ * Do NOT remove/print here — we delegate to playTurn + engine for printing/removal.
+ */
 public class DecreaseWarmth implements Status {
-
     @Override
     public void tickStatus(GameEntity entity, Location location) {
-        // Attached only to our animals, so direct cast is fine in this codebase
+        // This status is attached only to Animals in our codebase.
         Actor a = (Actor) entity;
 
+        if (!a.hasStatistic(AnimalAttribute.WARMTH)) return;
         a.modifyAttribute(AnimalAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
         if (a.getAttribute(AnimalAttribute.WARMTH) <= 0) {
-            // Use engine unconscious flag: HEALTH = 0
             a.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.UPDATE, 0);
         }
     }
