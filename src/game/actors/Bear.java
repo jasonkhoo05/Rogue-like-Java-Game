@@ -31,7 +31,7 @@ public class Bear extends Animal {
      * @param hitPoints   the Actor's starting hit points
      */
     public Bear(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints);
+        super(name, displayChar, hitPoints, 50 );
 
         this.setIntrinsicWeapon(new Claw());
         this.behaviours.put(1, new HostileBehaviour());
