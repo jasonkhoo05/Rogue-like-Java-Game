@@ -12,7 +12,7 @@ public class Aegis implements Status {
     private int duration;
 
     /**
-     * Constructor for Radiant state.
+     * Constructor for Aegis state.
      * @param duration number of turns the state lasts
      */
     public Aegis(int duration) {
