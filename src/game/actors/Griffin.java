@@ -26,7 +26,7 @@ public class Griffin extends MythicalCreature{
 
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        changeState(this);
+        changeState(this, display);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
