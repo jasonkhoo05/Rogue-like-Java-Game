@@ -24,7 +24,6 @@ public class Desiccation implements Status {
         for (Location specificLocation : location.getNearbyLocations(3)) {
             if (specificLocation.getActorAs(Dehydratable.class) != null) {
                 Objects.requireNonNull(specificLocation.getActorAs(Dehydratable.class)).dehydrate(3);
-                System.out.println("123456");
                 break;
             }
         }
