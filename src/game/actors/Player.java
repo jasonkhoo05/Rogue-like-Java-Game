@@ -11,10 +11,10 @@ import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
-import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
+import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
 import game.weapons.PoweredBareFist;
 
@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Class representing the Player.
  * @author Adrian Kristanto
  */
-public class Player extends Actor {
+public class Player extends Actor implements Dehydratable {
     /**
      * Constructor.
      *
@@ -149,4 +149,8 @@ public class Player extends Actor {
         return weapon;
     }
 
+    @Override
+    public void dehydrate(int hydrationValue) {
+        this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, hydrationValue);
+    }
 }
