@@ -11,6 +11,7 @@ import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
 import game.State.*;
 import game.behaviours.HostileBehaviour;
+import game.behaviours.SleepyBehaviour;
 import game.behaviours.WanderBehaviour;
 import game.weapons.Claw;
 
@@ -99,13 +100,15 @@ public class Griffin extends MythicalCreature{
         currentType = statesListGriffin.get(nextIndex);
         currentState = createState(currentType);
         addStatus(currentState);
+        // Add behaviours for the new state
+        applyStateBehaviours(currentType);
         display.println(this.getClass().getSimpleName() + " Transformed to " + currentType + " state!");
     }
 
     private Status createState(StatusTypeGriffin type) {
         return switch (type) {
-            case ANGRY -> new Angry(5);
-            case SLEEPY -> new Angry(5);
+            case ANGRY -> new Angry(2);
+            case SLEEPY -> new Sleepy(5);
             case DESICCATION -> new Angry(5);
         };
     }
@@ -118,7 +121,8 @@ public class Griffin extends MythicalCreature{
                 this.behaviours.put(999, new WanderBehaviour());
             }
             case SLEEPY -> {
-                this.behaviours.put(1, new WanderBehaviour());
+                this.behaviours.put(1, new SleepyBehaviour());
+                this.behaviours.put(999, new WanderBehaviour());
             }
             case DESICCATION -> {
                 this.behaviours.put(2, new WanderBehaviour());
