@@ -39,10 +39,6 @@ public class Griffin extends MythicalCreature{
 
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        // Move status tick logic here if not already done by engine
-//        for (Status status : this.statuses()) {
-//            status.tickStatus(this, map.locationOf(this));
-//        }
         changeState(this, display);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
