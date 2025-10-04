@@ -1,9 +1,8 @@
 package game.actors;
 
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.displays.Display;
-import game.State.StatusType;
+import game.state.StatusTypeUnicorn;
 import game.capabilities.StateChangeable;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 public abstract class MythicalCreature extends Actor implements StateChangeable {
     int statesIndexCounter = -1;
     // A list of all possible states of this MythicalCreature
-    List<StatusType> statesList = new ArrayList<>();
+    List<StatusTypeUnicorn> statesList = new ArrayList<>();
 
     /**
      * The constructor of the Actor class.
