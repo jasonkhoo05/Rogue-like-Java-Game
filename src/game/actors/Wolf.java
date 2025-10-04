@@ -8,6 +8,7 @@ import edu.monash.fit2099.engine.actors.Behaviour;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 import game.StatusEffects;
 import game.actions.AttackAction;
@@ -78,6 +79,11 @@ public class Wolf extends Actor implements Tameable {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
         if(otherActor.hasAbility(Ability.CAN_ATTACK)){
+            for (Item it : otherActor.getItemInventory()) {
+                if (it instanceof Weapon) {
+                    actions.add(new AttackAction(this, direction, (Weapon) it));
+                }
+            }
             actions.add(new AttackAction(this, direction));
         }
 
