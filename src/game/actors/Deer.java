@@ -9,6 +9,7 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
+import game.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.TameAction;
 import game.behaviours.CollectBehaviour;
@@ -47,6 +48,7 @@ public class Deer extends Actor implements Tameable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        StatusEffects.tick(this, map);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
