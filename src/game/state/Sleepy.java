@@ -1,17 +1,17 @@
-package game.State;
+package game.state;
 
 import edu.monash.fit2099.engine.GameEntity;
 import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.positions.Location;
 
-public class Angry implements Status {
+public class Sleepy implements Status {
     private int duration;
 
     /**
-     * Constructor for Angry state.
+     * Constructor for Sleepy state.
      * @param duration number of turns the state lasts
      */
-    public Angry(int duration) {
+    public Sleepy(int duration) {
         this.duration = duration;
     }
 
