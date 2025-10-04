@@ -11,6 +11,8 @@ import game.actors.Bear;
 import game.actors.Deer;
 import game.actors.Player;
 import game.actors.Wolf;
+import game.items.weapons.Axe;
+import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
@@ -42,7 +44,8 @@ public class Earth extends World {
         groundCreator.registerGround('T', AppleTree::new);
         groundCreator.registerGround('A', HazelnutTree::new);
         groundCreator.registerGround('Y', YewBerryTree::new);
-
+        player.addItemToInventory(new Torch());
+        player.addItemToInventory(new Axe());
         List<String> map = Arrays.asList(
                 "........................................",
                 "........................................",
