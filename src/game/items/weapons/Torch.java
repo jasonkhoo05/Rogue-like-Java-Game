@@ -5,6 +5,7 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.StatusEffects;
+import game.system.FireSystem;
 
 import java.util.Random;
 
@@ -29,6 +30,7 @@ public class Torch extends Item implements Weapon {
         }
         target.hurt(DAMAGE);
         StatusEffects.addBurn(target, 3, 7);
+        FireSystem.spawnAround(attacker, map, 1, 5, 5);
         return String.format("%s scorches %s for %d damage", attacker, target, DAMAGE);
     }
 
