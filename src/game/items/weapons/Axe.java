@@ -4,6 +4,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
+import game.StatusEffects;
 
 import java.util.Random;
 
@@ -29,6 +30,9 @@ public class Axe extends Item implements Weapon {
         }
         // hit then reduce hp
         target.hurt(DAMAGE);
+        if (rng.nextInt(100) >= 50) {
+            StatusEffects.addBleed(target, 10, 2);
+        }
         return String.format("%s chops %s for %d damage", attacker, target, DAMAGE);
     }
 
