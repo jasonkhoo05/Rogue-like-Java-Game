@@ -1,4 +1,4 @@
-package game.State;
+package game.state;
 
 public enum StatusTypeGriffin {
     ANGRY,
