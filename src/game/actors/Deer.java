@@ -16,6 +16,7 @@ import game.behaviours.CollectBehaviour;
 import game.behaviours.FollowBehaviour;
 import game.behaviours.WanderBehaviour;
 import game.capabilities.Tameable;
+import game.system.FireSystem;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -49,6 +50,7 @@ public class Deer extends Actor implements Tameable {
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
         StatusEffects.tick(this, map);
+        FireSystem.tick(map);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)

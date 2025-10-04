@@ -13,6 +13,7 @@ import game.Ability;
 import game.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
+import game.system.FireSystem;
 import game.weapons.BareFist;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class Player extends Actor {
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
         StatusEffects.tick(this, map);
+        FireSystem.tick(map);
         // Handle multi-turn Actions
         if (lastAction.getNextAction() != null)
             return lastAction.getNextAction();

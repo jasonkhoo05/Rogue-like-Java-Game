@@ -17,6 +17,7 @@ import game.behaviours.FollowBehaviour;
 import game.behaviours.HostileBehaviour;
 import game.behaviours.WanderBehaviour;
 import game.capabilities.Tameable;
+import game.system.FireSystem;
 import game.weapons.Bite;
 
 import java.util.Map;
@@ -55,6 +56,7 @@ public class Wolf extends Actor implements Tameable {
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
         StatusEffects.tick(this, map);
+        FireSystem.tick(map);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
