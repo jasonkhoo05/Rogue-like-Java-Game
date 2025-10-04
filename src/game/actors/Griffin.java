@@ -9,7 +9,7 @@ import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
-import game.State.*;
+import game.state.*;
 import game.behaviours.HostileBehaviour;
 import game.behaviours.SleepyBehaviour;
 import game.behaviours.WanderBehaviour;
