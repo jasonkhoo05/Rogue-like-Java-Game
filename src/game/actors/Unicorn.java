@@ -9,10 +9,10 @@ import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
-import game.State.Aegis;
-import game.State.Radiant;
-import game.State.StatusType;
-import game.State.Vigor;
+import game.state.Aegis;
+import game.state.Radiant;
+import game.state.StatusTypeUnicorn;
+import game.state.Vigor;
 import game.behaviours.WanderBehaviour;
 
 
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 public class Unicorn extends MythicalCreature {
     public Map<Integer, Behaviour> behaviours = new TreeMap<>();
     private Status currentState = null;
-    private StatusType currentType = null;
+    private StatusTypeUnicorn currentType = null;
     private Player player;
 
 
@@ -32,25 +32,17 @@ public class Unicorn extends MythicalCreature {
         this.behaviours.put(999, new WanderBehaviour());
 
         // Adding all the possible states of Unicorn to the list of states for changeState to loop through
-        this.statesList.add(StatusType.RADIANT);
-        this.statesList.add(StatusType.AEGIS);
-        this.statesList.add(StatusType.VIGOR);
+        this.statesList.add(StatusTypeUnicorn.RADIANT);
+        this.statesList.add(StatusTypeUnicorn.AEGIS);
+        this.statesList.add(StatusTypeUnicorn.VIGOR);
     }
 
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        // Move status tick logic here if not already done by engine
-        for (Status status : this.statuses()) {
-            status.tickStatus(this, map.locationOf(this));
-        }
+
         changeState(this,display);
 
-//        // Apply Vigor to Player only if Unicorn is in VIGOR state
-//        if (currentType == StatusType.VIGOR && player != null) {
-//            player.addStatus(new Vigor(5,player)); // lasts 3 turns
-//            display.println(player + " is now in VIGOR state!");
-//        }
-        if (currentType == StatusType.VIGOR) {
+        if (currentType == StatusTypeUnicorn.VIGOR) {
             for (int x : map.getXRange()) {
                 for (int y : map.getYRange()) {
                     Actor actor = map.at(x, y).getActor();
@@ -58,6 +50,18 @@ public class Unicorn extends MythicalCreature {
                         // Give the Player a new Vigor status
                         actor.addStatus(new Vigor(5)); // pass actor reference safely
                         display.println(actor + " is now in VIGOR state!");
+                    }
+                }
+            }
+        }
+
+        if (currentType == StatusTypeUnicorn.AEGIS) {
+            for (int x : map.getXRange()) {
+                for (int y : map.getYRange()) {
+                    Actor actor = map.at(x, y).getActor();
+                    if (actor != null && actor.hasAbility(Ability.IS_PLAYER)) {
+                        actor.addStatus(new Aegis(5)); // e.g., lasts 5 turns
+                        display.println(actor + " is now protected by AEGIS!");
                     }
                 }
             }
@@ -81,7 +85,7 @@ public class Unicorn extends MythicalCreature {
             currentType = statesList.get(0);
             currentState = createState(statesList.get(0));
             addStatus(currentState);
-            System.out.println("Transformed to " + currentState.getClass().getSimpleName() + " state!");
+            display.println("Transformed to " + currentState.getClass().getSimpleName() + " state!");
             return;
         }
 
@@ -92,8 +96,7 @@ public class Unicorn extends MythicalCreature {
 
 
         // Remove current state
-//        this.removeStatus(currentState);
-        System.out.println(currentType + " fades away.");
+        display.println(currentType + " fades away.");
 
         // Find current index by class type
         int currentIndex = statesList.indexOf(currentType);
@@ -114,10 +117,10 @@ public class Unicorn extends MythicalCreature {
         currentType = statesList.get(nextIndex);
         currentState = createState(currentType);
         addStatus(currentState);
-        display.println("Transformed to " + currentType + " state!");
+        display.println("Unicorn transformed to " + currentType + " state!");
     }
 
-    private Status createState(StatusType type) {
+    private Status createState(StatusTypeUnicorn type) {
         return switch (type) {
             case RADIANT -> new Radiant(5);
             case AEGIS -> new Aegis(5);
