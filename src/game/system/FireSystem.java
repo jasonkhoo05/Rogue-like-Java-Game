@@ -3,6 +3,7 @@ package game.system;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
+import game.positions.Dirt;
 
 import java.util.*;
 
@@ -36,10 +37,10 @@ public final class FireSystem {
                 if (dx == 0 && dy == 0) continue; // skip center
                 int newX = center.x() + dx;
                 int newY = center.y() + dy;
-                if (!map.contains(newX, newY)) continue;
+                if (!map.getXRange().contains(newX) || !map.getYRange().contains(newY)) continue;
 
                 Location loc = map.at(newX, newY);
-                // 覆盖同一格的旧火（重燃）
+                // Old fire covering the same tile
                 FIRE_MAP.put(loc, new FireCell(turns, dpt));
             }
         }
@@ -68,14 +69,7 @@ public final class FireSystem {
         // Removed the extinguished fire and changed the ground to Dirt
         for (Location loc : toRemove) {
             FIRE_MAP.remove(loc);
-            try {
-                // ⚠️ Dirt's classpath is adjusted according to your project
-                Class<?> dirtClass = Class.forName("game.ground.Dirt");
-                Object dirtObj = dirtClass.getDeclaredConstructor().newInstance();
-                loc.setGround((edu.monash.fit2099.engine.positions.Ground) dirtObj);
-            } catch (Exception e) {
-                System.err.println("Failed to set ground to Dirt: " + e);
-            }
+            loc.setGround(new Dirt());
         }
     }
 }
