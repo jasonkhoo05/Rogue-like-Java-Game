@@ -4,6 +4,7 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
+import game.items.weapons.coating.Coating;
 
 /**
  * Base class for weapons that can be coated with various effects (e.g., snow, yewberry).
