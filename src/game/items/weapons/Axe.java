@@ -1,43 +1,49 @@
 package game.items.weapons;
 
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
-import edu.monash.fit2099.engine.weapons.Weapon;
 import game.StatusEffects;
 
 import java.util.Random;
 
 /**
- * Axe (p) - A carryable weapon item.
- * Deals 15 damage with a 75% chance to hit.
+ * Axe (p) - a carryable Weapon item.
+ * Deals 15 damage with a 75% hit rate and may cause bleeding.
+ * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class Axe extends Item implements Weapon {
+public class Axe extends AbstractCoatableWeapon {
     private static final int DAMAGE = 15;
-    private static final int HIT_RATE = 75; // %
+    private static final int HIT_RATE = 75;
     private final Random rng = new Random();
 
     public Axe() {
-        // name = "Axe", displayChar = 'p', portable = true
-        super("Axe", 'p', true);
+        super("Axe", 'p');
     }
 
     @Override
     public String attack(Actor attacker, Actor target, GameMap map) {
-        // check hit or not
+        // Hit Registration
         if (rng.nextInt(100) >= HIT_RATE) {
             return attacker + " misses " + target + ".";
         }
-        // hit then reduce hp
+
+        // Hit causes basic damage
         target.hurt(DAMAGE);
-        if (rng.nextInt(100) >= 50) {
+
+        // 50% chance of bleeding
+        if (rng.nextInt(100) < 50) {
             StatusEffects.addBleed(target, 10, 2);
         }
+
+        // If coated, trigger the coating effect
+        triggerCoating(attacker, target, map);
+
+        // Output result description
         return String.format("%s chops %s for %d damage", attacker, target, DAMAGE);
     }
 
     @Override
     public String toString() {
-        return "Axe";
+        return super.toString(); // Keep the coating display logic of AbstractCoatableWeapon
     }
 }
