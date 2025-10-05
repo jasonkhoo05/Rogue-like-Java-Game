@@ -130,9 +130,6 @@ public final class StatusEffects {
         }
         @Override
         public void tick(Actor actor, GameMap map) {
-            // this is for immunize
-            //if (actor.hasCapability(TundraSpawned.INSTANCE)) { remaining--; return; }
-
             actor.modifyAttribute(
                     game.actors.attributes.PlayerAttribute.WARMTH,
                     edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
