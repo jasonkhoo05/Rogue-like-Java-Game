@@ -10,12 +10,12 @@ import edu.monash.fit2099.engine.positions.Location;
  * Maximum range: 3 tiles.
  * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class bow extends AbstractCoatableWeapon {
+public class Bow extends AbstractCoatableWeapon {
     private static final int DAMAGE = 5;
     private static final int HIT_RATE = 25; // %
     private static final int RANGE = 3;     // max attack distance
 
-    public bow() {
+    public Bow() {
         super("Bow", 'c'); // handled as portable in parent class
     }
 
