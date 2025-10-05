@@ -31,6 +31,7 @@ public class Deer extends Animal {
     public Deer(String name, char displayChar, int hitPoints) {
         super(name, displayChar, hitPoints, 10);
         this.behaviours.put(999, new WanderBehaviour());
+        
     }
 
     /**

@@ -15,14 +15,24 @@ import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
 import game.actors.attributes.AnimalAttribute;
+import game.capabilities.BehaviourHost;
 import game.capabilities.Tameable;
-import game.statuses.DecreaseWarmth;
+import game.status.DecreaseWarmth;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
-public abstract class Animal extends Actor implements Tameable {
+public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     Map<Integer, Behaviour> behaviours = new TreeMap<>();
+
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == BehaviourHost.class) {
+            return Optional.of(capability.cast(this));
+        }
+        return super.asCapability(capability);
+    }
 
     /**
      * The constructor of the Actor class.
@@ -106,6 +116,11 @@ public abstract class Animal extends Actor implements Tameable {
         }
 
         return actions;
+    }
+
+    @Override
+    public void putBehaviour(int priority, Behaviour behaviour) {
+        behaviours.put(priority, behaviour);
     }
 }
 
