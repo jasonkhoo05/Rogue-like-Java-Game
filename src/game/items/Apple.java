@@ -11,6 +11,8 @@ import game.actions.ConsumeAction;
 import game.actors.attributes.PlayerAttribute;
 import game.capabilities.Consumable;
 
+import java.util.Optional;
+
 public class Apple extends Item implements Consumable {
     final int INCREASE_HEALTH_VALUE = 3;
     final int INCREASE_HYDRATION_VALUE = 2;
@@ -22,6 +24,12 @@ public class Apple extends Item implements Consumable {
         super("Apple", 'a', true);
     }
 
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == Consumable.class) return Optional.of(capability.cast(this));
+        return super.asCapability(capability);
+    }
+
     /**
      * Defines the logic of being consumed
      *
@@ -31,7 +39,7 @@ public class Apple extends Item implements Consumable {
     public String consumedBy(Actor actor) {
         actor.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.INCREASE, INCREASE_HEALTH_VALUE);
         actor.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.INCREASE, INCREASE_HYDRATION_VALUE);
-        actor.removeItemFromInventory(this);
+
         return actor + " eats the apple and restores " + INCREASE_HEALTH_VALUE + " health and " + INCREASE_HYDRATION_VALUE + " hydration";
     }
 

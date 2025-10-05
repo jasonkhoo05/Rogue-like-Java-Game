@@ -160,7 +160,7 @@ public class Location implements Printable {
      * If that's important to them. All items on this ground will also
      * experience time.
      */
-    public void tick() {
+    public void tick()  {
         ground.tick(this);
         ground.tickStatuses(this);
         for (Item item : new ArrayList<>(items)) {
