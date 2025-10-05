@@ -133,14 +133,11 @@ public final class StatusEffects {
             // this is for immunize
             //if (actor.hasCapability(TundraSpawned.INSTANCE)) { remaining--; return; }
 
-            //
-            if (actor instanceof game.actors.Player p) {
-                p.modifyAttribute(
-                        game.actors.attributes.PlayerAttribute.WARMTH,
-                        edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
-                        warmthLoss
-                );
-            }
+            actor.modifyAttribute(
+                    game.actors.attributes.PlayerAttribute.WARMTH,
+                    edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
+                    warmthLoss
+            );
             remaining--;
         }
         @Override
