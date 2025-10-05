@@ -9,4 +9,5 @@ public enum Ability {
     ITEMSPAWNABLE,
     CAN_TAME,
     TAMED,
+    MEADOW_FORAGER
 }
