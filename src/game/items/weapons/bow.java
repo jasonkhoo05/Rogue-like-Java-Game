@@ -1,51 +1,54 @@
 package game.items.weapons;
 
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
-import edu.monash.fit2099.engine.weapons.Weapon;
 
 /**
- * bow (c) - carryable Weapon item.
- * Deals 5 damage with 25% chance to hit.
- * Can only attack within 3 tiles range.
+ * Bow (c) - a carryable Weapon item.
+ * Has a 25% chance to hit and deals 5 damage.
+ * Maximum range: 3 tiles.
+ * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class bow extends Item implements Weapon {
+public class bow extends AbstractCoatableWeapon {
     private static final int DAMAGE = 5;
-    private static final int HIT_RATE = 25; // percent
-    private static final int RANGE = 3;
+    private static final int HIT_RATE = 25; // %
+    private static final int RANGE = 3;     // max attack distance
 
     public bow() {
-        // name, display char, portable
-        super("Bow", 'c', true);
+        super("Bow", 'c'); // handled as portable in parent class
     }
 
     @Override
     public String attack(Actor attacker, Actor target, GameMap map) {
-        // Range detection
-        Location locA = map.locationOf(attacker);
-        Location locT = map.locationOf(target);
-        int dx = Math.abs(locA.x() - locT.x());
-        int dy = Math.abs(locA.y() - locT.y());
-        int distance = Math.max(dx, dy);  // Chebyshev distance, allowing eight directions
+        Location attackerLoc = map.locationOf(attacker);
+        Location targetLoc = map.locationOf(target);
+        int dx = Math.abs(attackerLoc.x() - targetLoc.x());
+        int dy = Math.abs(attackerLoc.y() - targetLoc.y());
+        int distance = Math.max(dx, dy);
 
+        // check range
         if (distance > RANGE) {
             return attacker + " is too far away to shoot " + target + ".";
         }
 
-        // Hit Detection
+        // hit chance
         if (Math.random() * 100 >= HIT_RATE) {
             return attacker + " misses " + target + " with an arrow.";
         }
 
-        // create damage
+        // apply base damage
         target.hurt(DAMAGE);
+
+        // trigger coating effect (if any)
+        triggerCoating(attacker, target, map);
+
+        // final message
         return String.format("%s shoots %s for %d damage", attacker, target, DAMAGE);
     }
 
     @Override
     public String toString() {
-        return "Bow";
+        return super.toString(); // include coating name if present
     }
 }
