@@ -26,6 +26,18 @@ public final class StatusEffects {
                 .add(new BurnEffect(dpt, turns));
     }
 
+    /** Add a poison effect */
+    public static void addPoison(Actor target, int dpt, int turns) {
+        registry.computeIfAbsent(target, k -> new ArrayList<>())
+                .add(new PoisonEffect(dpt, turns));
+    }
+
+    /** Add a frostbite effect */
+    public static void addFrostbite(Actor target, int warmthLoss, int turns) {
+        registry.computeIfAbsent(target, k -> new ArrayList<>())
+                .add(new FrostbiteEffect(warmthLoss, turns));
+    }
+
     /** Called once per turn to process all active effects on this actor */
     public static void tick(Actor actor, GameMap map) {
         List<Effect> effects = registry.get(actor);
@@ -90,4 +102,50 @@ public final class StatusEffects {
             return remaining <= 0;
         }
     }
+
+    /** Poison: Each round deducts health dpt, a total of turns, supports stacking */
+    static class PoisonEffect implements Effect {
+        private int remaining;
+        private final int damagePerTurn;
+        PoisonEffect(int dpt, int turns) {
+            this.damagePerTurn = dpt;
+            this.remaining = turns;
+        }
+        @Override
+        public void tick(Actor actor, GameMap map) {
+            actor.hurt(damagePerTurn);
+            remaining--;
+        }
+        @Override
+        public boolean expired() { return remaining <= 0; }
+    }
+
+    /** Frostbite: Reduces the target's WARMTH each round (if the target has this attribute); supports stacking */
+    static class FrostbiteEffect implements Effect {
+        private int remaining;
+        private final int warmthLoss;
+        FrostbiteEffect(int warmthLoss, int turns) {
+            this.warmthLoss = warmthLoss;
+            this.remaining = turns;
+        }
+        @Override
+        public void tick(Actor actor, GameMap map) {
+            // this is for immunize
+            //if (actor.hasCapability(TundraSpawned.INSTANCE)) { remaining--; return; }
+
+            //
+            if (actor instanceof game.actors.Player p) {
+                p.modifyAttribute(
+                        game.actors.attributes.PlayerAttribute.WARMTH,
+                        edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
+                        warmthLoss
+                );
+            }
+            remaining--;
+        }
+        @Override
+        public boolean expired() { return remaining <= 0; }
+    }
+
+
 }
