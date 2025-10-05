@@ -16,6 +16,7 @@ import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
+import game.status.BurningManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,10 +63,62 @@ public class Earth extends World {
         GameMap gameMap = new GameMap("Forest", groundCreator, map);
         this.addGameMap(gameMap);
 
+        List<String> plains = Arrays.asList(
+                ".........................",
+                ".........................",
+                ".........................",
+                ".........................",
+                ".........................",
+                ".........................",
+                ".........................",
+                "........................."
+        );
+
+        GameMap plainsMap = new GameMap("Plains", groundCreator, plains);
+        this.addGameMap(plainsMap);
+
         this.addPlayer(this.player, gameMap.at(22, 5));
         gameMap.at(25,6).addActor(new Deer("Deer", 'd', 50));
         gameMap.at(0,0).addActor(new Wolf("Wolf", 'e', 100));
         gameMap.at(3,3).addActor(new Bear("Bear", 'B', 200));
+
+
+
+        var doorForest = new game.positions.teleport.TeleDoor();
+        var doorPlains = new game.positions.teleport.TeleDoor();
+
+        doorForest
+                .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 18, 1)) // intra
+                .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 3, 3)); // inter
+
+        doorPlains
+                .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 20, 6)) // intra
+                .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 5, 5)); // inter
+
+
+        var circleForest = new game.positions.teleport.TeleportationCircle();
+        var circlePlains = new game.positions.teleport.TeleportationCircle();
+
+        circleForest
+                .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 10, 6)) // intra
+                .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 15, 2)); // inter
+
+        circlePlains
+                .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 8, 4))   // intra
+                .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 12, 3)); // inter
+
+        gameMap.at(22, 4).setGround(doorForest);
+        gameMap.at(7, 5).setGround(circleForest);
+        plainsMap.at(2, 6).setGround(doorPlains);
+        plainsMap.at(12, 3).setGround(circlePlains);
+
+        var cube = new game.items.TeleportCube()
+                .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 1, 1))
+                .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 23, 6));
+        player.addItemToInventory(cube);
+
+
+
     }
 
     /**
@@ -84,6 +137,8 @@ public class Earth extends World {
 
             // This loop is basically the whole game
             while (stillRunning() && this.player.isConscious()) {
+                // apply stacking burn DoT to all actors once per round
+                BurningManager.tickAll(actorLocations);
                 this.gameLoop();
             }
             display.println(endGameMessage());
