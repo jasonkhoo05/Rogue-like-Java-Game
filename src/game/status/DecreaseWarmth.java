@@ -1,4 +1,4 @@
-package game.statuses;
+package game.status;
 
 import edu.monash.fit2099.engine.GameEntity;
 import edu.monash.fit2099.engine.capabilities.Status;
