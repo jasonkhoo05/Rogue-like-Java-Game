@@ -11,6 +11,7 @@ import game.actors.Bear;
 import game.actors.Deer;
 import game.actors.Player;
 import game.actors.Wolf;
+import game.items.weapons.Bow;
 import game.positions.spawners.Cave;
 import game.positions.spawners.Meadow;
 import game.positions.spawners.SpawnerGround;
@@ -54,6 +55,7 @@ public class Earth extends World {
         groundCreator.registerGround('w', Meadow::new);
         player.addItemToInventory(new Torch());
         player.addItemToInventory(new Axe());
+        player.addItemToInventory(new Bow());
 
         List<String> map = Arrays.asList(
                 "........................................",
