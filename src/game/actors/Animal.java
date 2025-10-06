@@ -16,6 +16,7 @@ import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
 import game.actors.attributes.AnimalAttribute;
+import game.actors.attributes.PlayerAttribute;
 import game.capabilities.BehaviourHost;
 import game.capabilities.Tameable;
 import game.status.DecreaseWarmth;
@@ -61,6 +62,14 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
 
         display.println(String.format("[%s %c WARMTH=%d]",
                 this, this.getDisplayChar(),warmth));
+    }
+
+    /**
+     * Checks if player is still conscious
+     * @return true if hydrationLevel > 1 and warmthLevel > 1; false otherwise
+     */
+    public boolean isConscious(){
+        return super.isConscious() && this.getAttribute(AnimalAttribute.WARMTH) > 1;
     }
 
     /**
