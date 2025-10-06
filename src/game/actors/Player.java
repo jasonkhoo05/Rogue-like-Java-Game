@@ -34,8 +34,8 @@ public class Player extends Actor {
         super(name, displayChar, hitPoints);
         this.setIntrinsicWeapon(new BareFist());
 
-        this.addNewStatistic(PlayerAttribute.HYDRATION, new BaseActorAttribute(99));
-        this.addNewStatistic(PlayerAttribute.WARMTH, new BaseActorAttribute(99));
+        this.addNewStatistic(PlayerAttribute.HYDRATION, new BaseActorAttribute(9999));
+        this.addNewStatistic(PlayerAttribute.WARMTH, new BaseActorAttribute(9999));
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.UPDATE, hydrationLevel);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.UPDATE, warmthLevel);
