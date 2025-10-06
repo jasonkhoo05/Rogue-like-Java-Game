@@ -130,11 +130,20 @@ public final class StatusEffects {
         }
         @Override
         public void tick(Actor actor, GameMap map) {
-            actor.modifyAttribute(
-                    game.actors.attributes.PlayerAttribute.WARMTH,
-                    edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
-                    warmthLoss
-            );
+            if (actor instanceof game.actors.Player) {
+                actor.modifyAttribute(
+                        game.actors.attributes.PlayerAttribute.WARMTH,
+                        edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
+                        warmthLoss
+                );
+            } else {
+                // others are animals
+                actor.modifyAttribute(
+                        game.actors.attributes.AnimalAttribute.WARMTH,
+                        edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
+                        warmthLoss
+                );
+            }
             remaining--;
         }
         @Override
