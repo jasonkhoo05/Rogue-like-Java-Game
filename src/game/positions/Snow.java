@@ -18,6 +18,11 @@ public class Snow extends Ground {
     public ActionList allowableActions(Actor actor, Location location, String direction) {
         ActionList list = new ActionList();
 
+        // Add action only when this location is exactly where the actor is located
+        if (!location.containsAnActor() || location.getActor() != actor) {
+            return list;
+        }
+
         // Standing on Snow: Adds a "Snow Coating" menu item for each coatable weapon in your inventory (does not consume the item)
         for (var a : game.actions.CoatWeaponAction.buildFor(
                 actor,
