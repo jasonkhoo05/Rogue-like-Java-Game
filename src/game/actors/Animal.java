@@ -10,6 +10,7 @@ import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
@@ -104,6 +105,11 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
         if(otherActor.hasAbility(Ability.CAN_ATTACK)){
+            for (Item it : otherActor.getItemInventory()) {
+                if (it instanceof Weapon) {
+                    actions.add(new AttackAction(this, direction, (Weapon) it));
+                }
+            }
             actions.add(new AttackAction(this, direction));
         }
 
