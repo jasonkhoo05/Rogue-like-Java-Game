@@ -12,6 +12,7 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
+import game.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
@@ -75,6 +76,9 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        // Resolving ongoing effects
+        StatusEffects.tick(this, map);
+
         // If unconscious (e.g., warmth reached 0), announce via engine and remove
         if (!this.isConscious()) {
             return new NaturalDeathAction();
