@@ -82,7 +82,7 @@ public class Griffin extends MythicalCreature{
         int nextIndex = currentIndex;
 
         // Define per-state probabilities (in %)
-        int[] probabilities = {100, 100, 100};
+        int[] probabilities = {50 , 100, 60};
 
 
         // Roll probability
@@ -103,9 +103,9 @@ public class Griffin extends MythicalCreature{
 
     private Status createState(StatusTypeGriffin type) {
         return switch (type) {
-            case ANGRY -> new Angry(5);
-            case SLEEPY -> new Sleepy(5);
-            case DESICCATION -> new Desiccation(5);
+            case ANGRY -> new Angry(3);
+            case SLEEPY -> new Sleepy(3);
+            case DESICCATION -> new Desiccation(3);
         };
     }
 

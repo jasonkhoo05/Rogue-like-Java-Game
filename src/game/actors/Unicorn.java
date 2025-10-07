@@ -52,8 +52,8 @@ public class Unicorn extends MythicalCreature {
                     Actor actor = map.at(x, y).getActor();
                     if (actor != null && actor.hasAbility(Ability.IS_PLAYER)) {
                         // Give the Player a new Vigor status
-                        actor.addStatus(new Vigor(5)); // pass actor reference safely
-                        display.println(actor + " is now in VIGOR state!");
+                        actor.addStatus(new Vigor(3)); // pass actor reference safely
+                        display.println(this.getClass().getSimpleName() + " is now in VIGOR state!");
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class Unicorn extends MythicalCreature {
                 for (int y : map.getYRange()) {
                     Actor actor = map.at(x, y).getActor();
                     if (actor != null && actor.hasAbility(Ability.IS_PLAYER)) {
-                        actor.addStatus(new Aegis(5)); // e.g., lasts 5 turns
+                        actor.addStatus(new Aegis(3)); // e.g., lasts 3 turns
                         display.println(actor + " is now protected by AEGIS!");
                     }
                 }
@@ -89,7 +89,7 @@ public class Unicorn extends MythicalCreature {
             currentType = statesList.get(0);
             currentState = createState(statesList.get(0));
             addStatus(currentState);
-            display.println("Transformed to " + currentState.getClass().getSimpleName() + " state!");
+            display.println(this.getClass().getSimpleName() + " transformed to " + currentType + " state!");
             return;
         }
 
@@ -107,7 +107,7 @@ public class Unicorn extends MythicalCreature {
         int nextIndex = currentIndex;
 
         // Define per-state probabilities (in %)
-        int[] probabilities = {100, 100, 100};
+        int[] probabilities = {50, 60, 70};
 
 
         // Roll probability
@@ -129,9 +129,9 @@ public class Unicorn extends MythicalCreature {
 
     private Status createState(StatusTypeUnicorn type) {
         return switch (type) {
-            case RADIANT -> new Radiant(5);
-            case AEGIS -> new Aegis(5);
-            case VIGOR -> new Vigor(5);
+            case RADIANT -> new Radiant(3);
+            case AEGIS -> new Aegis(3);
+            case VIGOR -> new Vigor(3);
         };
     }
 
