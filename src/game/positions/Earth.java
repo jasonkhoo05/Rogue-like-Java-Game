@@ -11,6 +11,10 @@ import game.actors.Bear;
 import game.actors.Deer;
 import game.actors.Player;
 import game.actors.Wolf;
+import game.positions.spawners.Cave;
+import game.positions.spawners.Meadow;
+import game.positions.spawners.SpawnerGround;
+import game.positions.spawners.Tundra;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
@@ -29,7 +33,6 @@ public class Earth extends World {
      */
     public Earth(Display display, Player player) {
         super(display);
-
         this.player = player;
     }
 
@@ -43,6 +46,11 @@ public class Earth extends World {
         groundCreator.registerGround('T', AppleTree::new);
         groundCreator.registerGround('A', HazelnutTree::new);
         groundCreator.registerGround('Y', YewBerryTree::new);
+        groundCreator.registerGround('_', Tundra::new);
+        groundCreator.registerGround('C', Cave::new);
+        groundCreator.registerGround('w', Meadow::new);
+
+
 
         List<String> map = Arrays.asList(
                 "........................................",
@@ -75,12 +83,67 @@ public class Earth extends World {
         this.addGameMap(plainsMap);
 
         this.addPlayer(this.player, gameMap.at(22, 5));
-        gameMap.at(25,6).addActor(new Deer("Deer", 'd', 50));
-        gameMap.at(0,0).addActor(new Wolf("Wolf", 'e', 100));
-        gameMap.at(3,3).addActor(new Bear("Bear", 'B', 200));
+
+
+        // ---------- REQ2: Tundra spawners ----------
+        // Forest tundra spawns BEARS (5% / tick, +10 HP via Tundra effect)
+        {
+            Tundra tundraForest = new Tundra();
+            tundraForest.addFactory(() -> new game.actors.Bear("Bear", 'B', 200));
+            gameMap.at(6, 6).setGround(tundraForest);     // choose any empty tile
+        }
+
+        // Plains tundra spawns WOLVES (5% / tick, +10 HP via Tundra effect)
+        {
+            Tundra tundraPlains = new Tundra();
+            tundraPlains.addFactory(() -> new game.actors.Wolf("Wolf", 'e', 100));
+            plainsMap.at(19, 3).setGround(tundraPlains);  // choose any empty tile
+        }
+
+        // ----- REQ2: Caves every 5 turns -----
+
+        // Forest cave: spawns Bear, Wolf, Deer (equal chance)
+        {
+            SpawnerGround caveForest;
+            caveForest = new Cave()
+                    .addFactory(() -> new Bear("Bear", 'B', 200))
+                    .addFactory(() -> new Wolf("Wolf", 'e', 100))
+                    .addFactory(() -> new Deer("Deer", 'd', 50));
+            gameMap.at(17, 2).setGround(caveForest);
+        }
+
+        // Plains cave: spawns Bear, Wolf (equal chance)
+        {
+            SpawnerGround cavePlains;
+            cavePlains = new Cave()
+                    .addFactory(() -> new Bear("Bear", 'B', 200))
+                    .addFactory(() -> new Wolf("Wolf", 'e', 100));
+            plainsMap.at(7, 1).setGround(cavePlains);
+        }
+
+        // -------- REQ2: Meadows (every 7 turns, 50% chance) --------
+
+        // Forest meadow: spawns DEERS
+        {
+            var meadowForest = new Meadow()
+                    .addFactory(() -> new game.actors.Deer("Deer", 'd', 50));
+            // choose any empty tile coordinates
+            gameMap.at(30, 6).setGround(meadowForest);
+        }
+
+        // Plains meadow: spawns DEERS and BEARS (equal chance)
+        {
+            var meadowPlains = new Meadow()
+                    .addFactory(() -> new game.actors.Deer("Deer", 'd', 50))
+                    .addFactory(() -> new game.actors.Bear("Bear", 'B', 200));
+            plainsMap.at(4, 4).setGround(meadowPlains);
+        }
 
 
 
+
+
+        // ---------- Teleporters & items (unchanged) ----------
         var doorForest = new game.positions.teleport.TeleDoor();
         var doorPlains = new game.positions.teleport.TeleDoor();
 
@@ -113,8 +176,6 @@ public class Earth extends World {
                 .addDestination(new game.positions.teleport.TeleportDestination(gameMap, 1, 1))
                 .addDestination(new game.positions.teleport.TeleportDestination(plainsMap, 23, 6));
         player.addItemToInventory(cube);
-
-
 
     }
 
