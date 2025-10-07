@@ -74,8 +74,9 @@ public class Deer extends Actor implements Tameable {
         ActionList actions = new ActionList();
         if(otherActor.hasAbility(Ability.CAN_ATTACK)){
             for (Item it : otherActor.getItemInventory()) {
-                if (it instanceof Weapon) {
-                    actions.add(new AttackAction(this, direction, (Weapon) it));
+                if (it.hasAbility(Ability.WEAPON_ITEM)) {  // check if it's weapon
+                    Weapon w = (Weapon) it;
+                    actions.add(new AttackAction(this, direction, w));
                 }
             }
             actions.add(new AttackAction(this, direction));
