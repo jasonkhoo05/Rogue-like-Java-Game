@@ -35,6 +35,8 @@ public class Axe extends Item implements Weapon {
         if (rng.nextInt(100) >= 50) {
             StatusEffects.addBleed(target, 10, 2);
         }
+        // test mode
+        //StatusEffects.addBleed(target, 10, 2);
         return String.format("%s chops %s for %d damage", attacker, target, DAMAGE);
     }
 
