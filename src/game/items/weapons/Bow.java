@@ -5,20 +5,22 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
+import game.Ability;
 
 /**
  * bow (c) - carryable Weapon item.
  * Deals 5 damage with 25% chance to hit.
  * Can only attack within 3 tiles range.
  */
-public class bow extends Item implements Weapon {
+public class Bow extends Item implements Weapon {
     private static final int DAMAGE = 5;
     private static final int HIT_RATE = 25; // percent
     private static final int RANGE = 3;
 
-    public bow() {
+    public Bow() {
         // name, display char, portable
         super("Bow", 'c', true);
+        this.enableAbility(Ability.WEAPON_ITEM);
     }
 
     @Override

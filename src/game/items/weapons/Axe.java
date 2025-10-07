@@ -4,6 +4,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
+import game.Ability;
 import game.StatusEffects;
 
 import java.util.Random;
@@ -20,6 +21,7 @@ public class Axe extends Item implements Weapon {
     public Axe() {
         // name = "Axe", displayChar = 'p', portable = true
         super("Axe", 'p', true);
+        this.enableAbility(Ability.WEAPON_ITEM);
     }
 
     @Override

@@ -4,6 +4,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
+import game.Ability;
 import game.StatusEffects;
 import game.system.FireSystem;
 
@@ -21,6 +22,7 @@ public class Torch extends Item implements Weapon {
     public Torch() {
         // name, display char, portable
         super("Torch", 'y', true);
+        this.enableAbility(Ability.WEAPON_ITEM);
     }
 
     @Override
