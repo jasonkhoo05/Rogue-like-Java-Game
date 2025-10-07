@@ -11,6 +11,7 @@ import game.actors.Bear;
 import game.actors.Deer;
 import game.actors.Player;
 import game.actors.Wolf;
+import game.items.weapons.Bow;
 import game.positions.spawners.Cave;
 import game.positions.spawners.Meadow;
 import game.positions.spawners.SpawnerGround;
@@ -52,10 +53,10 @@ public class Earth extends World {
         groundCreator.registerGround('C', Cave::new);
         groundCreator.registerGround('w', Meadow::new);
 
-
-
+        player.addItemToInventory(new Bow());
         player.addItemToInventory(new Torch());
         player.addItemToInventory(new Axe());
+
         List<String> map = Arrays.asList(
                 "........................................",
                 "........................................",
@@ -87,6 +88,7 @@ public class Earth extends World {
         this.addGameMap(plainsMap);
 
         this.addPlayer(this.player, gameMap.at(22, 5));
+        gameMap.at(22,4).addActor(new Bear("Bear", 'B', 200));
 
 
         // ---------- REQ2: Tundra spawners ----------
