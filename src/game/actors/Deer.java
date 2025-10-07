@@ -22,9 +22,7 @@ import game.system.FireSystem;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Deer extends Actor implements Tameable {
-    private Map<Integer, Behaviour> behaviours = new TreeMap<>();
-
+public class Deer extends Animal {
     /**
      * Constructor
      *
@@ -34,7 +32,7 @@ public class Deer extends Actor implements Tameable {
      * @param hitPoints   the Actor's starting hit points
      */
     public Deer(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints);
+        super(name, displayChar, hitPoints, 10);
         this.behaviours.put(999, new WanderBehaviour());
     }
 
@@ -50,8 +48,6 @@ public class Deer extends Actor implements Tameable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        StatusEffects.tick(this, map);
-        FireSystem.tick(map);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
@@ -73,12 +69,6 @@ public class Deer extends Actor implements Tameable {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
         if(otherActor.hasAbility(Ability.CAN_ATTACK)){
-            for (Item it : otherActor.getItemInventory()) {
-                if (it.hasAbility(Ability.WEAPON_ITEM)) {  // check if it's weapon
-                    Weapon w = (Weapon) it;
-                    actions.add(new AttackAction(this, direction, w));
-                }
-            }
             actions.add(new AttackAction(this, direction));
         }
 

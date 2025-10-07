@@ -5,26 +5,35 @@ import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actions.DoNothingAction;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.actors.Behaviour;
+import edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation;
+import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
-import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
-import game.StatusEffects;
 import game.actions.AttackAction;
+import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
-import game.behaviours.FightAlongSideBehaviour;
-import game.behaviours.FollowBehaviour;
-import game.behaviours.HostileBehaviour;
-import game.behaviours.WanderBehaviour;
+import game.actors.attributes.AnimalAttribute;
+import game.capabilities.BehaviourHost;
 import game.capabilities.Tameable;
-import game.system.FireSystem;
-import game.weapons.Claw;
+import game.status.DecreaseWarmth;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
-public class Bear extends Animal {
+public abstract class Animal extends Actor implements Tameable, BehaviourHost {
+    Map<Integer, Behaviour> behaviours = new TreeMap<>();
+
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == BehaviourHost.class) {
+            return Optional.of(capability.cast(this));
+        }
+        return super.asCapability(capability);
+    }
+
     /**
      * The constructor of the Actor class.
      *
@@ -33,14 +42,24 @@ public class Bear extends Animal {
      *                    display
      * @param hitPoints   the Actor's starting hit points
      */
-    public Bear(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints, 50 );
+    public Animal(String name, char displayChar, int hitPoints, int startingWarmth) {
+        super(name, displayChar, hitPoints);
 
-        this.setIntrinsicWeapon(new Claw());
-        this.behaviours.put(1, new HostileBehaviour());
-        this.behaviours.put(999, new WanderBehaviour());
+        // Warmth attribute (cap 99 is sufficient; adjust if you want)
+        this.addNewStatistic(AnimalAttribute.WARMTH, new BaseActorAttribute(99));
+        this.modifyAttribute(AnimalAttribute.WARMTH, ActorAttributeOperation.UPDATE, startingWarmth);
 
-        this.enableAbility(Ability.CAN_ATTACK);
+        // Attach the warmth decay status (sets HEALTH=0 when warmth hits 0)
+        this.addStatus(new DecreaseWarmth());
+    }
+
+    /** Optional: print a compact stat line each turn. */
+    protected void printStats(GameMap map, Display display) {
+
+        int warmth = getAttribute(AnimalAttribute.WARMTH);
+
+        display.println(String.format("[%s %c WARMTH=%d]",
+                this, this.getDisplayChar(),warmth));
     }
 
     /**
@@ -55,8 +74,15 @@ public class Bear extends Animal {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        StatusEffects.tick(this, map);
-        FireSystem.tick(map);
+        // If unconscious (e.g., warmth reached 0), announce via engine and remove
+        if (!this.isConscious()) {
+            return new NaturalDeathAction();
+        }
+
+        // (Optional) Show stats
+        printStats(map, display);
+
+
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
@@ -78,12 +104,6 @@ public class Bear extends Animal {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
         if(otherActor.hasAbility(Ability.CAN_ATTACK)){
-            for (Item it : otherActor.getItemInventory()) {
-                if (it.hasAbility(Ability.WEAPON_ITEM)) {  // check if it's weapon
-                    Weapon w = (Weapon) it;
-                    actions.add(new AttackAction(this, direction, w));
-                }
-            }
             actions.add(new AttackAction(this, direction));
         }
 
@@ -98,20 +118,9 @@ public class Bear extends Animal {
         return actions;
     }
 
-    /**
-     * Defines the logic of after being tamed
-     *
-     * @param actor The actor that tames this
-     * @param item The item that the actor used for taming this
-     * @return the description that this has been tamed by the actor
-     */
     @Override
-    public String tameBy(Actor actor, Item item) {
-        actor.removeItemFromInventory(item);
-        this.behaviours.clear();
-        this.behaviours.put(1, new FightAlongSideBehaviour(actor));
-        this.behaviours.put(2, new FollowBehaviour(actor));
-        this.enableAbility(Ability.TAMED);
-        return actor + " has tamed " + this + " using " + item;
+    public void putBehaviour(int priority, Behaviour behaviour) {
+        behaviours.put(priority, behaviour);
     }
 }
+
