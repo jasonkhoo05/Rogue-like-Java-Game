@@ -9,6 +9,7 @@ import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
+import game.behaviours.HealBehaviour;
 import game.state.Aegis;
 import game.state.Radiant;
 import game.state.StatusTypeUnicorn;
@@ -35,6 +36,9 @@ public class Unicorn extends MythicalCreature {
         this.statesList.add(StatusTypeUnicorn.RADIANT);
         this.statesList.add(StatusTypeUnicorn.AEGIS);
         this.statesList.add(StatusTypeUnicorn.VIGOR);
+
+        this.behaviours.put(10, new HealBehaviour(new Display()));
+
     }
 
     @Override
@@ -117,6 +121,9 @@ public class Unicorn extends MythicalCreature {
         currentType = statesList.get(nextIndex);
         currentState = createState(currentType);
         addStatus(currentState);
+
+        applyStateBehaviours(currentType, display);
+
         display.println("Unicorn transformed to " + currentType + " state!");
     }
 
@@ -126,5 +133,23 @@ public class Unicorn extends MythicalCreature {
             case AEGIS -> new Aegis(5);
             case VIGOR -> new Vigor(5);
         };
+    }
+
+    private void applyStateBehaviours(StatusTypeUnicorn type, Display display) {
+        this.behaviours.clear();
+        switch (type) {
+            case RADIANT -> {
+                this.behaviours.put(1, new HealBehaviour(display));
+                this.behaviours.put(999, new WanderBehaviour());
+            }
+            case AEGIS -> {
+                // Maybe give defensive behaviour later if needed
+                this.behaviours.put(999, new WanderBehaviour());
+            }
+            case VIGOR -> {
+                // Could give buff behaviour later if needed
+                this.behaviours.put(999, new WanderBehaviour());
+            }
+        }
     }
 }
