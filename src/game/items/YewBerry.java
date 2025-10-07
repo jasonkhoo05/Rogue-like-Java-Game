@@ -10,6 +10,8 @@ import game.Ability;
 import game.actions.ConsumeAction;
 import game.capabilities.Consumable;
 
+import java.util.Optional;
+
 public class YewBerry extends Item implements Consumable {
     final int FINAL_HEALTH_VALUE = 0;
 
@@ -20,6 +22,12 @@ public class YewBerry extends Item implements Consumable {
         super("Yew Berry", 'x', true);
     }
 
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == Consumable.class) return Optional.of(capability.cast(this));
+        return super.asCapability(capability);
+    }
+
     /**
      * Defines the logic of being consumed
      *
@@ -28,7 +36,7 @@ public class YewBerry extends Item implements Consumable {
      */
     public String consumedBy(Actor actor) {
         actor.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.UPDATE, FINAL_HEALTH_VALUE);
-        actor.removeItemFromInventory(this);
+
         return actor + " eats the yew berry and they fell unconscious";
     }
 

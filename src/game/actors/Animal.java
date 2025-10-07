@@ -5,19 +5,34 @@ import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actions.DoNothingAction;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.actors.Behaviour;
+import edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation;
+import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
 import game.actions.AttackAction;
+import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
+import game.actors.attributes.AnimalAttribute;
+import game.capabilities.BehaviourHost;
 import game.capabilities.Tameable;
+import game.status.DecreaseWarmth;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
-public abstract class Animal extends Actor implements Tameable {
+public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     Map<Integer, Behaviour> behaviours = new TreeMap<>();
+
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == BehaviourHost.class) {
+            return Optional.of(capability.cast(this));
+        }
+        return super.asCapability(capability);
+    }
 
     /**
      * The constructor of the Actor class.
@@ -27,8 +42,24 @@ public abstract class Animal extends Actor implements Tameable {
      *                    display
      * @param hitPoints   the Actor's starting hit points
      */
-    public Animal(String name, char displayChar, int hitPoints) {
+    public Animal(String name, char displayChar, int hitPoints, int startingWarmth) {
         super(name, displayChar, hitPoints);
+
+        // Warmth attribute (cap 99 is sufficient; adjust if you want)
+        this.addNewStatistic(AnimalAttribute.WARMTH, new BaseActorAttribute(99));
+        this.modifyAttribute(AnimalAttribute.WARMTH, ActorAttributeOperation.UPDATE, startingWarmth);
+
+        // Attach the warmth decay status (sets HEALTH=0 when warmth hits 0)
+        this.addStatus(new DecreaseWarmth());
+    }
+
+    /** Optional: print a compact stat line each turn. */
+    protected void printStats(GameMap map, Display display) {
+
+        int warmth = getAttribute(AnimalAttribute.WARMTH);
+
+        display.println(String.format("[%s %c WARMTH=%d]",
+                this, this.getDisplayChar(),warmth));
     }
 
     /**
@@ -43,6 +74,15 @@ public abstract class Animal extends Actor implements Tameable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        // If unconscious (e.g., warmth reached 0), announce via engine and remove
+        if (!this.isConscious()) {
+            return new NaturalDeathAction();
+        }
+
+        // (Optional) Show stats
+        printStats(map, display);
+
+
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
             if(action != null)
@@ -77,4 +117,10 @@ public abstract class Animal extends Actor implements Tameable {
 
         return actions;
     }
+
+    @Override
+    public void putBehaviour(int priority, Behaviour behaviour) {
+        behaviours.put(priority, behaviour);
+    }
 }
+

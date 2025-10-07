@@ -12,9 +12,12 @@ public enum Ability
     ITEMSPAWNABLE,
     CAN_TAME,
     TAMED,
+    
     HEALABLE,
     RECEIVED_HEAL,
     IMMUNITY,
     BOOST_DAMAGE,
     IS_PLAYER,
+
+    MEADOW_FORAGER
 }

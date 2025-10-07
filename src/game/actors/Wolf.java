@@ -31,7 +31,7 @@ public class Wolf extends Animal {
      * @param hitPoints   the Actor's starting hit points
      */
     public Wolf(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints);
+        super(name, displayChar, hitPoints, 25);
         this.setIntrinsicWeapon(new Bite());
         this.behaviours.put(1, new HostileBehaviour());
         this.behaviours.put(999, new WanderBehaviour());

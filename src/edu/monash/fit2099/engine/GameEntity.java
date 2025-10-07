@@ -142,7 +142,7 @@ public abstract class GameEntity {
      * Returns an Optional containing the capability if supported, or empty if
      * not.
      */
-    public final <T> Optional<T> asCapability(Class<T> capability) {
+    public <T> Optional<T> asCapability(Class<T> capability) {
         // Ensure that 'type' is an interface
         if (!capability.isInterface() && !Modifier.isAbstract(capability.getModifiers()) ) {
             throw new IllegalArgumentException("Capability must be a contract (abstract/interface): " + capability.getName());

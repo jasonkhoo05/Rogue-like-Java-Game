@@ -29,7 +29,7 @@ public class Deer extends Animal {
      * @param hitPoints   the Actor's starting hit points
      */
     public Deer(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints);
+        super(name, displayChar, hitPoints, 10);
         this.behaviours.put(999, new WanderBehaviour());
     }
 

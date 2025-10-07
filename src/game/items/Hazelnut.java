@@ -10,6 +10,8 @@ import game.Ability;
 import game.actions.ConsumeAction;
 import game.capabilities.Consumable;
 
+import java.util.Optional;
+
 public class Hazelnut extends Item implements Consumable {
     final int INCREASE_MAX_HEALTH_VALUE = 1;
 
@@ -20,6 +22,12 @@ public class Hazelnut extends Item implements Consumable {
         super("Hazelnut", 'n', true);
     }
 
+    @Override
+    public <T> Optional<T> asCapability(Class<T> capability) {
+        if (capability == Consumable.class) return Optional.of(capability.cast(this));
+        return super.asCapability(capability);
+    }
+
     /**
      * Defines the logic of being consumed
      *
@@ -28,7 +36,7 @@ public class Hazelnut extends Item implements Consumable {
      */
     public String consumedBy(Actor actor) {
         actor.modifyStatsMaximum(BaseAttributes.HEALTH, ActorAttributeOperation.INCREASE, INCREASE_MAX_HEALTH_VALUE);
-        actor.removeItemFromInventory(this);
+
         return actor + " eats the hazelnut and increases their maximum health by " + INCREASE_MAX_HEALTH_VALUE;
     }
 
