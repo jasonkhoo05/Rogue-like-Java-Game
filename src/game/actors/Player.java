@@ -10,6 +10,7 @@ import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
+import game.status.DecreaseWarmth;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
@@ -44,6 +45,7 @@ public class Player extends Actor {
         }
 
         this.enableAbility(Ability.CAN_ATTACK);
+        this.addStatus(new DecreaseWarmth());
     }
 
     /**
@@ -65,7 +67,6 @@ public class Player extends Actor {
             return lastAction.getNextAction();
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
-        this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
