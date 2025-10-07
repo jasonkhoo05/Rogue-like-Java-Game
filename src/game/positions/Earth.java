@@ -21,7 +21,6 @@ import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
-import game.status.BurningManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -202,7 +201,7 @@ public class Earth extends World {
             // This loop is basically the whole game
             while (stillRunning() && this.player.isConscious()) {
                 // apply stacking burn DoT to all actors once per round
-                BurningManager.tickAll(actorLocations);
+
                 this.gameLoop();
             }
             display.println(endGameMessage());
