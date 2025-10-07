@@ -60,8 +60,8 @@ public class Earth extends World {
         gameMap.at(23,3).addActor(new Deer("Deer", 'd', 50));
         gameMap.at(0,0).addActor(new Wolf("Wolf", 'e', 100));
         gameMap.at(23,4).addActor(new Bear("Bear", 'B', 200));
-        gameMap.at(23,5).addActor(new Unicorn("Unicorn", 'U', 1000));
-        gameMap.at(24,4).addActor(new Griffin("Griffin", 'G', 1000));
+//        gameMap.at(23,5).addActor(new Unicorn("Unicorn", 'U', 1000));
+//        gameMap.at(24,4).addActor(new Griffin("Griffin", 'G', 1000));
     }
 
     /**
