@@ -14,6 +14,7 @@ import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.Ability;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
+import game.behaviours.HealBehaviour;
 import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
 import game.weapons.PoweredBareFist;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
  * @author Adrian Kristanto
  */
 public class Player extends Actor implements Dehydratable {
+
     /**
      * Constructor.
      *
@@ -64,12 +66,6 @@ public class Player extends Actor implements Dehydratable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-
-        if (this.hasAbility(Ability.RECEIVED_HEAL)) {
-            this.heal(5);
-            this.disableAbility(Ability.RECEIVED_HEAL);
-            display.println(this + " is healed by radiant energy!");
-        }
 
         // Handle multi-turn Actions
         if (lastAction.getNextAction() != null)
@@ -124,15 +120,6 @@ public class Player extends Actor implements Dehydratable {
         this.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.DECREASE, damage);
     }
 
-//    @Override
-//    public IntrinsicWeapon getIntrinsicWeapon() {
-//        // If player has BOOST_DAMAGE, return the powered version
-//        if (this.hasAbility(Ability.BOOST_DAMAGE)) {
-//            return new PoweredBareFist();
-//        } else {
-//            return new BareFist();
-//        }
-//    }
 
     @Override
     public IntrinsicWeapon getIntrinsicWeapon() {
