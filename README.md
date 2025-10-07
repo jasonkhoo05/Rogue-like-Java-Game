@@ -7,4 +7,15 @@
     `MM A'  `MM A'      MM    M   `MM.M       MM        MM   Y  ,   MM  YM.   
      :MM;    :MM;       MM    M     YMM       MM        MM     ,M   MM   `Mb. 
       VF      VF      .JMML..JML.    YM     .JMML.    .JMMmmmmMMM .JMML. .JMM.
+      
+      
+     Unicorn (3 states) :
+     1. Aegis( - Provide immunity to player
+     2. Radiant - Heals player by 10 health 
+     3. Vigor - Provides 2x boost attack damage for player 
+     
+     Griffin (3 states):
+     1. Desiccation - Reduce player hydration level by 3 + 1 (1 is from default hydration reduction) 
+     2. Sleepy - Sleep for random amount of turns
+     3. Angry - Become hostile and attack animals and player
 ```
