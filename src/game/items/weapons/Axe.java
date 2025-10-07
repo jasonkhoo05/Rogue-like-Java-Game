@@ -5,7 +5,7 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
-import game.StatusEffects;
+import game.status.StatusEffects;
 
 import java.util.Random;
 

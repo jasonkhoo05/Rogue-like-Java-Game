@@ -3,7 +3,7 @@ package game.positions;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.Ground;
 import edu.monash.fit2099.engine.positions.Location;
-import game.status.BurningManager;
+import game.status.StatusEffects;
 
 /**
  * Temporary fire tile (‘^’).
@@ -29,7 +29,7 @@ public class Fire extends Ground {
         // If an actor is here *this tick*, (re)apply a burn stack (5 dmg for 5 turns)
         Actor actor = location.getActor();
         if (actor != null && actor.isConscious()) {
-            BurningManager.addBurn(actor, 5, 5);
+            StatusEffects.addBurn(actor, 5, 5);
         }
     }
 

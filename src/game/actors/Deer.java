@@ -8,19 +8,12 @@ import edu.monash.fit2099.engine.actors.Behaviour;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
-import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
-import game.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.TameAction;
 import game.behaviours.CollectBehaviour;
 import game.behaviours.FollowBehaviour;
 import game.behaviours.WanderBehaviour;
-import game.capabilities.Tameable;
-import game.system.FireSystem;
-
-import java.util.Map;
-import java.util.TreeMap;
 
 public class Deer extends Animal {
     /**
