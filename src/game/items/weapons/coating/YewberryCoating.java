@@ -2,7 +2,7 @@ package game.items.weapons.coating;
 
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
-import game.StatusEffects;
+import game.status.StatusEffects;
 
 /**
  * Coating made from Yewberry.

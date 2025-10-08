@@ -21,7 +21,6 @@ import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
-import game.status.BurningManager;
 
 import java.util.Arrays;
 import java.util.List;
