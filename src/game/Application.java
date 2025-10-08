@@ -21,8 +21,8 @@ public class Application {
         items.add(new Bedroll("Bedroll", '=', true));
         items.add(new Bottle("Bottle", 'o', true));
 
-        Player player = new Player("Explorer", 'ඞ', 100, 20, 30, items);
-        //Player player = new Player("Explorer", 'ඞ', 100000, 200, 300, items);
+        //Player player = new Player("Explorer", 'ඞ', 100, 20, 30, items);
+        Player player = new Player("Explorer", 'ඞ', 100000, 200, 300, items);
         Earth earth = new Earth(terminalDisplay, player);
         try{
             for (String line : FancyMessage.GAME_TITLE.split("\n")) {

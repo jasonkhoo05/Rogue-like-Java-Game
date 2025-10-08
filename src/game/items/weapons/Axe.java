@@ -13,7 +13,7 @@ import java.util.Random;
  * Axe (p) - A carryable weapon item.
  * Deals 15 damage with a 75% chance to hit.
  */
-public class Axe extends Item implements Weapon {
+public class Axe extends AbstractCoatableWeapon implements Weapon {
     private static final int DAMAGE = 15;
     private static final int HIT_RATE = 75; // %
     private final Random rng = new Random();

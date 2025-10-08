@@ -13,7 +13,7 @@ import game.Ability;
  * Maximum range: 3 tiles.
  * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class Bow extends Item implements Weapon {
+public class Bow extends AbstractCoatableWeapon implements Weapon {
     private static final int DAMAGE = 5;
     private static final int HIT_RATE = 25; // percent
     private static final int RANGE = 3;

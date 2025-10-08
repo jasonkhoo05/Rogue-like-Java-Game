@@ -18,10 +18,11 @@ public abstract class AbstractCoatableWeapon extends Item implements Weapon {
     /**
      * Constructor.
      *
-     * @param name the weapon's name
+     * @param name        the weapon's name
      * @param displayChar the display character for the weapon
+     * @param b
      */
-    protected AbstractCoatableWeapon(String name, char displayChar) {
+    protected AbstractCoatableWeapon(String name, char displayChar, boolean b) {
         super(name, displayChar, true); // true = portable item
     }
 
