@@ -1,8 +1,11 @@
 package game.items.weapons;
 
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
+import edu.monash.fit2099.engine.weapons.Weapon;
+import game.Ability;
 
 /**
  * Bow (c) - a carryable Weapon item.
@@ -10,34 +13,36 @@ import edu.monash.fit2099.engine.positions.Location;
  * Maximum range: 3 tiles.
  * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class Bow extends AbstractCoatableWeapon {
+public class Bow extends Item implements Weapon {
     private static final int DAMAGE = 5;
-    private static final int HIT_RATE = 25; // %
-    private static final int RANGE = 3;     // max attack distance
+    private static final int HIT_RATE = 25; // percent
+    private static final int RANGE = 3;
 
     public Bow() {
-        super("Bow", 'c'); // handled as portable in parent class
+        // name, display char, portable
+        super("Bow", 'c', true);
+        this.enableAbility(Ability.WEAPON_ITEM);
     }
 
     @Override
     public String attack(Actor attacker, Actor target, GameMap map) {
-        Location attackerLoc = map.locationOf(attacker);
-        Location targetLoc = map.locationOf(target);
-        int dx = Math.abs(attackerLoc.x() - targetLoc.x());
-        int dy = Math.abs(attackerLoc.y() - targetLoc.y());
-        int distance = Math.max(dx, dy);
+        // Range detection
+        Location locA = map.locationOf(attacker);
+        Location locT = map.locationOf(target);
+        int dx = Math.abs(locA.x() - locT.x());
+        int dy = Math.abs(locA.y() - locT.y());
+        int distance = Math.max(dx, dy);  // Chebyshev distance, allowing eight directions
 
-        // check range
         if (distance > RANGE) {
             return attacker + " is too far away to shoot " + target + ".";
         }
 
-        // hit chance
+        // Hit Detection
         if (Math.random() * 100 >= HIT_RATE) {
             return attacker + " misses " + target + " with an arrow.";
         }
 
-        // apply base damage
+        // create damage
         target.hurt(DAMAGE);
 
         // trigger coating effect (if any)
@@ -49,6 +54,6 @@ public class Bow extends AbstractCoatableWeapon {
 
     @Override
     public String toString() {
-        return super.toString(); // include coating name if present
+        return "Bow";
     }
 }

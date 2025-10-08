@@ -36,7 +36,6 @@ public class Earth extends World {
      */
     public Earth(Display display, Player player) {
         super(display);
-
         this.player = player;
     }
 
@@ -53,9 +52,10 @@ public class Earth extends World {
         groundCreator.registerGround('_', Tundra::new);
         groundCreator.registerGround('C', Cave::new);
         groundCreator.registerGround('w', Meadow::new);
+
+        player.addItemToInventory(new Bow());
         player.addItemToInventory(new Torch());
         player.addItemToInventory(new Axe());
-        player.addItemToInventory(new Bow());
 
         List<String> map = Arrays.asList(
                 "........................................",
@@ -88,6 +88,7 @@ public class Earth extends World {
         this.addGameMap(plainsMap);
 
         this.addPlayer(this.player, gameMap.at(22, 5));
+        gameMap.at(22,4).addActor(new Bear("Bear", 'B', 200));
 
 
         // ---------- REQ2: Tundra spawners ----------
@@ -201,7 +202,7 @@ public class Earth extends World {
             // This loop is basically the whole game
             while (stillRunning() && this.player.isConscious()) {
                 // apply stacking burn DoT to all actors once per round
-                BurningManager.tickAll(actorLocations);
+
                 this.gameLoop();
             }
             display.println(endGameMessage());

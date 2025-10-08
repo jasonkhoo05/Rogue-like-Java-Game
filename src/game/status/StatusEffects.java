@@ -1,4 +1,4 @@
-package game;
+package game.status;
 
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
@@ -72,6 +72,7 @@ public final class StatusEffects {
         @Override
         public void tick(Actor actor, GameMap map) {
             actor.hurt(damagePerTurn);
+            System.out.println(actor + " bleeds for " + damagePerTurn + " damage.");
             remaining--;
         }
 
@@ -94,6 +95,7 @@ public final class StatusEffects {
         @Override
         public void tick(Actor actor, GameMap map) {
             actor.hurt(damagePerTurn);
+            System.out.println(actor + " is burned, losing " + damagePerTurn + " HP.");
             remaining--;
         }
 

@@ -10,10 +10,10 @@ import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
-import game.StatusEffects;
+import game.status.DecreaseWarmth;
+import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
-import game.system.FireSystem;
 import game.weapons.BareFist;
 
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ public class Player extends Actor {
         }
 
         this.enableAbility(Ability.CAN_ATTACK);
+        this.addStatus(new DecreaseWarmth());
     }
 
     /**
@@ -60,13 +61,12 @@ public class Player extends Actor {
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
         StatusEffects.tick(this, map);
-        FireSystem.tick(map);
+
         // Handle multi-turn Actions
         if (lastAction.getNextAction() != null)
             return lastAction.getNextAction();
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
-        this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));

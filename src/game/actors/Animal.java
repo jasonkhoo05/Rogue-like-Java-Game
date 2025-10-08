@@ -12,11 +12,11 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
+import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
 import game.actors.attributes.AnimalAttribute;
-import game.actors.attributes.PlayerAttribute;
 import game.capabilities.BehaviourHost;
 import game.capabilities.Tameable;
 import game.status.DecreaseWarmth;
@@ -65,14 +65,6 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     }
 
     /**
-     * Checks if player is still conscious
-     * @return true if hydrationLevel > 1 and warmthLevel > 1; false otherwise
-     */
-    public boolean isConscious(){
-        return super.isConscious() && this.getAttribute(AnimalAttribute.WARMTH) > 1;
-    }
-
-    /**
      * Select and return an action to perform on the current turn.
      *
      * @param actions collection of possible Actions for this Actor
@@ -84,6 +76,9 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        // Resolving ongoing effects
+        StatusEffects.tick(this, map);
+
         // If unconscious (e.g., warmth reached 0), announce via engine and remove
         if (!this.isConscious()) {
             return new NaturalDeathAction();
@@ -113,13 +108,17 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
-        if(otherActor.hasAbility(Ability.CAN_ATTACK)){
+
+        if (otherActor.hasAbility(Ability.CAN_ATTACK)) {
             for (Item it : otherActor.getItemInventory()) {
-                if (it instanceof Weapon) {
-                    actions.add(new AttackAction(this, direction, (Weapon) it));
+                Optional<Weapon> maybeWeapon =
+                        it.asCapability(Weapon.class);
+
+                if (maybeWeapon.isPresent()) {
+                    actions.add(new AttackAction(this, direction, maybeWeapon.get()));
                 }
             }
-            actions.add(new AttackAction(this, direction));
+            actions.add(new game.actions.AttackAction(this, direction));
         }
 
         if (!this.hasAbility(Ability.TAMED)) {
