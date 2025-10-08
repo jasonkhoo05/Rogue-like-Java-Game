@@ -116,6 +116,7 @@ public final class StatusEffects {
         @Override
         public void tick(Actor actor, GameMap map) {
             actor.hurt(damagePerTurn);
+            System.out.println(actor + " suffers " + damagePerTurn + " poison damage.");
             remaining--;
         }
         @Override
