@@ -10,6 +10,10 @@ public interface Coating {
     /** Coating name for display (e.g., "Yewberry", "Snow"). */
     String name();
 
-    /** Called when the coated weapon successfully hits a target. */
-    void onHit(Actor attacker, Actor target, GameMap map);
+    /**
+     * Called when the coated weapon successfully hits a target.
+     *
+     * @return
+     */
+    String onHit(Actor attacker, Actor target, GameMap map);
 }

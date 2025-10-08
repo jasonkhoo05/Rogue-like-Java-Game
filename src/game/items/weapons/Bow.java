@@ -1,7 +1,6 @@
 package game.items.weapons;
 
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
@@ -13,14 +12,14 @@ import game.Ability;
  * Maximum range: 3 tiles.
  * Can be coated with additional effects (e.g., snow, yewberry).
  */
-public class Bow extends AbstractCoatableWeapon implements Weapon {
+public class Bow extends AbstractCoatableWeapon{
     private static final int DAMAGE = 5;
     private static final int HIT_RATE = 25; // percent
     private static final int RANGE = 3;
 
     public Bow() {
         // name, display char, portable
-        super("Bow", 'c', true);
+        super("Bow", 'c');
         this.enableAbility(Ability.WEAPON_ITEM);
     }
 

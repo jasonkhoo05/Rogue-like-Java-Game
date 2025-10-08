@@ -20,9 +20,8 @@ public abstract class AbstractCoatableWeapon extends Item implements Weapon {
      *
      * @param name        the weapon's name
      * @param displayChar the display character for the weapon
-     * @param b
      */
-    protected AbstractCoatableWeapon(String name, char displayChar, boolean b) {
+    protected AbstractCoatableWeapon(String name, char displayChar) {
         super(name, displayChar, true); // true = portable item
     }
 
@@ -37,10 +36,9 @@ public abstract class AbstractCoatableWeapon extends Item implements Weapon {
     }
 
     /** Trigger the coating effect when the weapon hits a target. */
-    protected void triggerCoating(Actor attacker, Actor target, GameMap map) {
-        if (coating != null) {
-            coating.onHit(attacker, target, map);
-        }
+    protected String triggerCoating(Actor attacker, Actor target, GameMap map) {
+        if (coating == null) return "";
+        return coating.onHit(attacker, target, map);
     }
 
     /** Display coating name if present (e.g., "Axe [Yewberry]"). */

@@ -17,8 +17,9 @@ public class YewberryCoating implements Coating {
     }
 
     @Override
-    public void onHit(Actor attacker, Actor target, GameMap map) {
+    public String onHit(Actor attacker, Actor target, GameMap map) {
         // Trigger poison effect (can be stacked)
         StatusEffects.addPoison(target, 4, 5);
+        return target + " is poisoned by the yew berry coating.";
     }
 }
