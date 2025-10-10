@@ -12,13 +12,10 @@ public enum Ability {
     CAN_TAME,
     TAMED,
     MEADOW_FORAGER,
-    WEAPON_ITEM
-
+    WEAPON_ITEM,
     HEALABLE,
     RECEIVED_HEAL,
     IMMUNITY,
     BOOST_DAMAGE,
     IS_PLAYER,
-
-    MEADOW_FORAGER
 }
