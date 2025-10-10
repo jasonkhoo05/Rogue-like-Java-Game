@@ -11,7 +11,6 @@ import java.util.List;
 public abstract class MythicalCreature extends Actor implements StateChangeable {
     int statesIndexCounter = -1;
     // A list of all possible states of this MythicalCreature
-    List<StatusTypeUnicorn> statesList = new ArrayList<>();
 
     /**
      * The constructor of the Actor class.
@@ -23,7 +22,6 @@ public abstract class MythicalCreature extends Actor implements StateChangeable 
      */
     public MythicalCreature(String name, char displayChar, int hitPoints) {
         super(name, displayChar, hitPoints);
-        this.statesList = new ArrayList<>();
     }
 
     @Override

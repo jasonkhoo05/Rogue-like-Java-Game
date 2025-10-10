@@ -17,6 +17,8 @@ import game.state.Vigor;
 import game.behaviours.WanderBehaviour;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -26,7 +28,7 @@ public class Unicorn extends MythicalCreature {
     private Status currentState = null;
     private StatusTypeUnicorn currentType = null;
     private Player player;
-
+    List<StatusTypeUnicorn> statesList = new ArrayList<>();
 
     public Unicorn(String name, char displayChar, int hitPoints) {
         super(name, displayChar, hitPoints);
