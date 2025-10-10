@@ -5,16 +5,21 @@ import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation;
 import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
+import edu.monash.fit2099.engine.actors.attributes.BaseAttributes;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.Ability;
 import game.status.DecreaseWarmth;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
+import game.behaviours.HealBehaviour;
+import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
+import game.weapons.PoweredBareFist;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,8 @@ import java.util.ArrayList;
  * Class representing the Player.
  * @author Adrian Kristanto
  */
-public class Player extends Actor {
+public class Player extends Actor implements Dehydratable {
+
     /**
      * Constructor.
      *
@@ -34,8 +40,8 @@ public class Player extends Actor {
         super(name, displayChar, hitPoints);
         this.setIntrinsicWeapon(new BareFist());
 
-        this.addNewStatistic(PlayerAttribute.HYDRATION, new BaseActorAttribute(9999));
-        this.addNewStatistic(PlayerAttribute.WARMTH, new BaseActorAttribute(9999));
+        this.addNewStatistic(PlayerAttribute.HYDRATION, new BaseActorAttribute(99));
+        this.addNewStatistic(PlayerAttribute.WARMTH, new BaseActorAttribute(99));
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.UPDATE, hydrationLevel);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.UPDATE, warmthLevel);
@@ -46,16 +52,19 @@ public class Player extends Actor {
 
         this.enableAbility(Ability.CAN_ATTACK);
         this.addStatus(new DecreaseWarmth());
+        this.enableAbility(Ability.HEALABLE);
+        this.enableAbility(Ability.IS_PLAYER);
+
     }
 
     /**
      * Select and return an action to perform on the current turn.
      *
-     * @param actions collection of possible Actions for this Actor
+     * @param actions    collection of possible Actions for this Actor
      * @param lastAction The Action this Actor took last turn. Can do
-     * interesting things in conjunction with Action.getNextAction()
-     * @param map the map containing the Actor
-     * @param display the I/O object to which messages may be written
+     *                   interesting things in conjunction with Action.getNextAction()
+     * @param map        the map containing the Actor
+     * @param display    the I/O object to which messages may be written
      * @return the Action to be performed
      */
     @Override
@@ -101,5 +110,36 @@ public class Player extends Actor {
             actions.add(new AttackAction(this, direction));
         }
         return actions;
+    }
+
+    @Override
+    public void hurt(int damage) {
+        // If the actor is immune (from Aegis), skip damage
+        if (this.hasAbility(Ability.IMMUNITY)) {
+            System.out.println(this + " is shielded by Aegis and takes no damage!");
+            return;
+        }
+        this.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.DECREASE, damage);
+    }
+
+
+    @Override
+    public IntrinsicWeapon getIntrinsicWeapon() {
+        IntrinsicWeapon weapon;
+        if (this.hasAbility(Ability.BOOST_DAMAGE)) {
+            weapon = new PoweredBareFist();
+        } else {
+            weapon = new BareFist();
+        }
+
+        // DEBUG: print the type of weapon being returned
+        System.out.println(this + " intrinsic weapon is: " + weapon.getClass().getSimpleName());
+
+        return weapon;
+    }
+
+    @Override
+    public void dehydrate(int hydrationValue) {
+        this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, hydrationValue);
     }
 }
