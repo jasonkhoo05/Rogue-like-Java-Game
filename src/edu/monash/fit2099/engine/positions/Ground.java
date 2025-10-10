@@ -60,7 +60,7 @@ public abstract class Ground extends GameEntity implements Printable {
      *
      * @param location The location of the Ground
      */
-    public void tick(Location location)  {
+    public void tick(Location location){
     }
 
     /**
