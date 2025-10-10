@@ -16,7 +16,7 @@
      Changing state order:
      1. Radiant (50 %) - Provide immunity to player
      2. Aegis (60 %)- Heals player by 10 health 
-     3. Vigor (70 %)- Provides 2x boost attack damage for player 
+     3. Vigor (70 %)- Provides 2x boost attack damage for player when attacking with an intrinsic weapon
      
      Griffin (3 states):
      % = the probability of this creature changing to another state, if it fails to change, 
