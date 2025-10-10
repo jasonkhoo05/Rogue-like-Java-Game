@@ -28,13 +28,6 @@ import java.util.TreeMap;
 public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     Map<Integer, Behaviour> behaviours = new TreeMap<>();
 
-    @Override
-    public <T> Optional<T> asCapability(Class<T> capability) {
-        if (capability == BehaviourHost.class) {
-            return Optional.of(capability.cast(this));
-        }
-        return super.asCapability(capability);
-    }
 
     /**
      * The constructor of the Actor class.
