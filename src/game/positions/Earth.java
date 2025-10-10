@@ -8,14 +8,16 @@ import edu.monash.fit2099.engine.positions.DefaultGroundCreator;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.World;
 import game.actors.*;
+import game.items.weapons.Bow;
 import game.positions.spawners.Cave;
 import game.positions.spawners.Meadow;
 import game.positions.spawners.SpawnerGround;
 import game.positions.spawners.Tundra;
+import game.items.weapons.Axe;
+import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
-import game.status.BurningManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +49,9 @@ public class Earth extends World {
         groundCreator.registerGround('C', Cave::new);
         groundCreator.registerGround('w', Meadow::new);
 
-
+        player.addItemToInventory(new Bow());
+        player.addItemToInventory(new Torch());
+        player.addItemToInventory(new Axe());
 
         List<String> map = Arrays.asList(
                 "........................................",
@@ -195,7 +199,7 @@ public class Earth extends World {
             // This loop is basically the whole game
             while (stillRunning() && this.player.isConscious()) {
                 // apply stacking burn DoT to all actors once per round
-                BurningManager.tickAll(actorLocations);
+
                 this.gameLoop();
             }
             display.println(endGameMessage());

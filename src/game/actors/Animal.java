@@ -10,7 +10,9 @@ import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
+import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
 import game.actions.TameAction;
@@ -74,6 +76,9 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        // Resolving ongoing effects
+        StatusEffects.tick(this, map);
+
         // If unconscious (e.g., warmth reached 0), announce via engine and remove
         if (!this.isConscious()) {
             return new NaturalDeathAction();
@@ -103,8 +108,17 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
-        if(otherActor.hasAbility(Ability.CAN_ATTACK)){
-            actions.add(new AttackAction(this, direction));
+
+        if (otherActor.hasAbility(Ability.CAN_ATTACK)) {
+            for (Item it : otherActor.getItemInventory()) {
+                Optional<Weapon> maybeWeapon =
+                        it.asCapability(Weapon.class);
+
+                if (maybeWeapon.isPresent()) {
+                    actions.add(new AttackAction(this, direction, maybeWeapon.get()));
+                }
+            }
+            actions.add(new game.actions.AttackAction(this, direction));
         }
 
         if (!this.hasAbility(Ability.TAMED)) {

@@ -33,6 +33,8 @@ public class Deer extends Animal {
         this.behaviours.put(999, new WanderBehaviour());
     }
 
+
+
     /**
      * Defines the logic of after being tamed
      *

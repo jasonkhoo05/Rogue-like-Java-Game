@@ -12,6 +12,8 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.Ability;
+import game.status.DecreaseWarmth;
+import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
 import game.behaviours.HealBehaviour;
@@ -44,11 +46,12 @@ public class Player extends Actor implements Dehydratable {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.UPDATE, hydrationLevel);
         this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.UPDATE, warmthLevel);
 
-        for (Item item : items) {
+        for (Item item : items){
             this.addItemToInventory(item);
         }
 
         this.enableAbility(Ability.CAN_ATTACK);
+        this.addStatus(new DecreaseWarmth());
         this.enableAbility(Ability.HEALABLE);
         this.enableAbility(Ability.IS_PLAYER);
 
@@ -66,13 +69,13 @@ public class Player extends Actor implements Dehydratable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
+        StatusEffects.tick(this, map);
 
         // Handle multi-turn Actions
         if (lastAction.getNextAction() != null)
             return lastAction.getNextAction();
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
-        this.modifyAttribute(PlayerAttribute.WARMTH, ActorAttributeOperation.DECREASE, 1);
 
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
@@ -85,10 +88,9 @@ public class Player extends Actor implements Dehydratable {
 
     /**
      * Checks if player is still conscious
-     *
      * @return true if hydrationLevel > 1 and warmthLevel > 1; false otherwise
      */
-    public boolean isConscious() {
+    public boolean isConscious(){
         return super.isConscious() && this.getAttribute(PlayerAttribute.HYDRATION) > 1 && this.getAttribute(PlayerAttribute.WARMTH) > 1;
     }
 
@@ -97,14 +99,14 @@ public class Player extends Actor implements Dehydratable {
      * current Actor.
      *
      * @param otherActor the Actor that might be performing attack
-     * @param direction  String representing the direction of the other Actor
-     * @param map        current GameMap
+     * @param direction String representing the direction of the other Actor
+     * @param map current GameMap
      * @return A collection of Actions.
      */
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
-        if (otherActor.hasAbility(Ability.CAN_ATTACK)) {
+        if(otherActor.hasAbility(Ability.CAN_ATTACK)){
             actions.add(new AttackAction(this, direction));
         }
         return actions;

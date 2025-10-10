@@ -52,6 +52,18 @@ public class YewBerry extends Item implements Consumable {
     @Override
     public ActionList allowableActions(Actor owner, GameMap map) {
         this.enableAbility(Ability.CAN_TAME);
-        return new ActionList(new ConsumeAction(this));
+        ActionList actions = new ActionList();
+        // can eat
+        actions.add(new ConsumeAction(this));
+        // add coating
+        for (var a : game.actions.CoatWeaponAction.buildFor(
+                owner,
+                new game.items.weapons.coating.YewberryCoating(),
+                this // coating by the item, will be consumed
+        )) {
+            actions.add(a);
+        }
+
+        return actions;
     }
 }
