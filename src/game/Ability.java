@@ -10,5 +10,6 @@ public enum Ability {
     CAN_TAME,
     TAMED,
     MEADOW_FORAGER,
-    WEAPON_ITEM
+    WEAPON_ITEM,
+    RANGED_WEAPON
 }
