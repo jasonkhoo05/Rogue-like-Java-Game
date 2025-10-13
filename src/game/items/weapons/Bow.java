@@ -8,9 +8,9 @@ import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 
 /**
- * bow (c) - carryable Weapon item.
+ * Bow (c) - a carryable ranged weapon item.
  * Deals 5 damage with 25% chance to hit.
- * Can only attack within 3 tiles range.
+ * Can attack targets within 3 tiles range.
  */
 public class Bow extends Item implements Weapon {
     private static final int DAMAGE = 5;
@@ -18,33 +18,34 @@ public class Bow extends Item implements Weapon {
     private static final int RANGE = 3;
 
     public Bow() {
-        // name, display char, portable
         super("Bow", 'c', true);
         this.enableAbility(Ability.WEAPON_ITEM);
+        this.enableAbility(Ability.RANGED_WEAPON);
     }
 
     @Override
     public String attack(Actor attacker, Actor target, GameMap map) {
-        // Range detection
         Location locA = map.locationOf(attacker);
         Location locT = map.locationOf(target);
         int dx = Math.abs(locA.x() - locT.x());
         int dy = Math.abs(locA.y() - locT.y());
-        int distance = Math.max(dx, dy);  // Chebyshev distance, allowing eight directions
+        int distance = Math.max(dx, dy);
+
 
         if (distance > RANGE) {
             return attacker + " is too far away to shoot " + target + ".";
         }
 
-        // Hit Detection
-        if (Math.random() * 100 >= HIT_RATE) {
-            return attacker + " misses " + target + " with an arrow.";
+        if (Math.random() * 100 < HIT_RATE) {
+            target.hurt(DAMAGE);
+            return String.format("%s shoots %s for %d damage.", attacker, target, DAMAGE);
         }
 
-        // create damage
-        target.hurt(DAMAGE);
-        return String.format("%s shoots %s for %d damage", attacker, target, DAMAGE);
+        return attacker + " misses the shot at " + target + ".";
     }
+
+
+    public int getRange() { return RANGE; }
 
     @Override
     public String toString() {
