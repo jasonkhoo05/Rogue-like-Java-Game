@@ -46,8 +46,13 @@ public class CoatWeaponAction extends Action {
      */
     public static ActionList buildFor(Actor actor, Coating coating, Item sourceItem) {
         ActionList list = new ActionList();
+
         for (Item it : actor.getItemInventory()) {
-            if (it instanceof AbstractCoatableWeapon w && w.isCoatable()) {
+            var maybeW = it.asCapability(AbstractCoatableWeapon.class);
+            if (maybeW.isEmpty()) continue;
+
+            AbstractCoatableWeapon w = maybeW.get();
+            if (w.isCoatable()) {
                 list.add(new CoatWeaponAction(coating, sourceItem, w));
             }
         }
