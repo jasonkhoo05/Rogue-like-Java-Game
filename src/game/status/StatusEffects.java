@@ -2,7 +2,8 @@ package game.status;
 
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
-
+import game.actors.attributes.AnimalAttribute;
+import game.actors.attributes.PlayerAttribute;
 import java.util.*;
 
 /**
@@ -133,16 +134,15 @@ public final class StatusEffects {
         }
         @Override
         public void tick(Actor actor, GameMap map) {
-            if (actor instanceof game.actors.Player) {
+            if (actor.hasStatistic(AnimalAttribute.WARMTH)) {
                 actor.modifyAttribute(
-                        game.actors.attributes.PlayerAttribute.WARMTH,
+                        AnimalAttribute.WARMTH,
                         edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
                         warmthLoss
                 );
-            } else {
-                // others are animals
+            } else if (actor.hasStatistic(PlayerAttribute.WARMTH)) {
                 actor.modifyAttribute(
-                        game.actors.attributes.AnimalAttribute.WARMTH,
+                        PlayerAttribute.WARMTH,
                         edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation.DECREASE,
                         warmthLoss
                 );

@@ -30,7 +30,7 @@ public class ConsumeAction extends Action {
      */
     @Override
     public String execute(Actor actor, GameMap map) {
-        // Get the consumable capability (no instanceof)
+        // Get the consumable capability
         var maybe = item.asCapability(Consumable.class);
         if (maybe.isEmpty()) {
             return actor + " can't consume " + item + ".";

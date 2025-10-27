@@ -19,6 +19,9 @@ import game.actors.attributes.PlayerAttribute;
 import game.behaviours.HealBehaviour;
 import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
+import edu.monash.fit2099.engine.positions.Location;
+import edu.monash.fit2099.engine.weapons.Weapon;
+import game.actions.RangedAttackAction;
 import game.weapons.PoweredBareFist;
 
 import java.util.ArrayList;
@@ -77,6 +80,7 @@ public class Player extends Actor implements Dehydratable {
 
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
 
+        addRangedAttackOptions(actions, map);
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
         display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
@@ -84,6 +88,50 @@ public class Player extends Actor implements Dehydratable {
         // return/print the console menu
         Menu menu = new Menu(actions);
         return menu.showMenu(this, display);
+    }
+
+
+    /** Add attack options for ranged weapons such as bows to the menu;
+     * does not rely on adjacent allowableActions calls */
+    private void addRangedAttackOptions(ActionList actions, GameMap map) {
+        // Range is set to 3
+        final int MAX_RANGE = 3;
+
+        // If the player has no attack ability, return directly
+        if (!this.hasAbility(Ability.CAN_ATTACK)) return;
+
+        // Find player coordinates
+        Location me = map.locationOf(this);
+
+        for (Item it : this.getItemInventory()) {
+            var maybeWeapon = it.asCapability(Weapon.class);
+            if (maybeWeapon.isEmpty()) continue;
+
+            // Must be marked with the "Ranged Weapon"
+            if (!it.hasAbility(Ability.RANGED_WEAPON)) continue;
+
+            Weapon weapon = maybeWeapon.get();
+
+            // Scans a square area of MAX_RANGE around the player
+            for (int dx = -MAX_RANGE; dx <= MAX_RANGE; dx++) {
+                for (int dy = -MAX_RANGE; dy <= MAX_RANGE; dy++) {
+                    if (dx == 0 && dy == 0) continue;         // skip self
+                    int x = me.x() + dx, y = me.y() + dy;
+
+                    if (!map.getXRange().contains(x) || !map.getYRange().contains(y)) continue;
+
+                    Location loc = map.at(x, y);
+                    if (!map.isAnActorAt(loc)) continue;
+
+                    Actor target = map.getActorAt(loc);
+
+                    int dist = Math.max(Math.abs(dx), Math.abs(dy));
+                    if (dist > 1 && dist <= MAX_RANGE) {
+                        actions.add(new RangedAttackAction(target, weapon, MAX_RANGE));
+                    }
+                }
+            }
+        }
     }
 
     /**

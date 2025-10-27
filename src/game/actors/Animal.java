@@ -10,8 +10,10 @@ import edu.monash.fit2099.engine.actors.attributes.BaseActorAttribute;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
+import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
+import game.actions.RangedAttackAction;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
@@ -103,15 +105,29 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
         ActionList actions = new ActionList();
 
         if (otherActor.hasAbility(Ability.CAN_ATTACK)) {
+            Location a = map.locationOf(otherActor);
+            Location t = map.locationOf(this);
+            int dist = Math.max(Math.abs(a.x() - t.x()), Math.abs(a.y() - t.y()));
             for (Item it : otherActor.getItemInventory()) {
                 Optional<Weapon> maybeWeapon =
                         it.asCapability(Weapon.class);
 
-                if (maybeWeapon.isPresent()) {
-                    actions.add(new AttackAction(this, direction, maybeWeapon.get()));
+                if (maybeWeapon.isEmpty()) continue;
+                Weapon w = maybeWeapon.get();
+                if (dist == 1) {
+                    actions.add(new AttackAction(this, direction, w));
+                }
+
+                if (it.hasAbility(Ability.RANGED_WEAPON)) {
+                    final int BOW_RANGE = 3;
+                    if (dist > 1 && dist <= BOW_RANGE) {
+                        actions.add(new RangedAttackAction(this, w, BOW_RANGE));
+                    }
                 }
             }
-            actions.add(new game.actions.AttackAction(this, direction));
+            if (dist == 1) {
+                actions.add(new AttackAction(this, direction));
+            }
         }
 
         if (!this.hasAbility(Ability.TAMED)) {

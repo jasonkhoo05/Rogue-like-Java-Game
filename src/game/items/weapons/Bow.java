@@ -1,6 +1,7 @@
 package game.items.weapons;
 
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
@@ -21,6 +22,7 @@ public class Bow extends AbstractCoatableWeapon{
         // name, display char, portable
         super("Bow", 'c');
         this.enableAbility(Ability.WEAPON_ITEM);
+        this.enableAbility(Ability.RANGED_WEAPON);
     }
 
     @Override
@@ -50,6 +52,9 @@ public class Bow extends AbstractCoatableWeapon{
         // final message
         return String.format("%s shoots %s for %d damage", attacker, target, DAMAGE);
     }
+
+
+    public int getRange() { return RANGE; }
 
     @Override
     public String toString() {
