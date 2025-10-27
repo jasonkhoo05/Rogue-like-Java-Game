@@ -24,11 +24,7 @@ public class Apple extends Item implements Consumable {
         super("Apple", 'a', true);
     }
 
-    @Override
-    public <T> Optional<T> asCapability(Class<T> capability) {
-        if (capability == Consumable.class) return Optional.of(capability.cast(this));
-        return super.asCapability(capability);
-    }
+
 
     /**
      * Defines the logic of being consumed

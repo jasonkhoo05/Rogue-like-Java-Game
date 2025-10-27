@@ -7,10 +7,7 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.DefaultGroundCreator;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.World;
-import game.actors.Bear;
-import game.actors.Deer;
-import game.actors.Player;
-import game.actors.Wolf;
+import game.actors.*;
 import game.items.weapons.Bow;
 import game.positions.spawners.Cave;
 import game.positions.spawners.Meadow;
@@ -87,8 +84,8 @@ public class Earth extends World {
         this.addGameMap(plainsMap);
 
         this.addPlayer(this.player, gameMap.at(22, 5));
-        // Testing Bear
-        //gameMap.at(22,4).addActor(new Bear("Bear", 'B', 200));
+        gameMap.at(24,1).addActor(new Griffin("Griffin",'G',1000));
+        gameMap.at(26,4).addActor(new Unicorn("Unicorn",'U',1000));
 
 
         // ---------- REQ2: Tundra spawners ----------

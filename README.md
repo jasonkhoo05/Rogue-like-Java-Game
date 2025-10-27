@@ -7,4 +7,23 @@
     `MM A'  `MM A'      MM    M   `MM.M       MM        MM   Y  ,   MM  YM.   
      :MM;    :MM;       MM    M     YMM       MM        MM     ,M   MM   `Mb. 
       VF      VF      .JMML..JML.    YM     .JMML.    .JMMmmmmMMM .JMML. .JMM.
+      
+      
+     Unicorn (3 states) :
+     % = the probability of this creature changing to another state, if it fails to change, 
+     it maintains the current state.
+     
+     Changing state order:
+     1. Radiant (50 %) - Provide immunity to player
+     2. Aegis (60 %)- Heals player by 10 health 
+     3. Vigor (70 %)- Provides 2x boost attack damage for player when attacking with an intrinsic weapon
+     
+     Griffin (3 states):
+     % = the probability of this creature changing to another state, if it fails to change, 
+     it maintains the current state.
+     
+     Changing state order:
+     1. Angry (50 %) - Reduce player hydration level by 3 + 1 (1 is from default hydration reduction) 
+     2. Sleepy (100 %)- Sleep for random amount of turns
+     3. Desiccation (60 %)- Become hostile and attack animals and player
 ```

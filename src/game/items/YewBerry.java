@@ -22,11 +22,7 @@ public class YewBerry extends Item implements Consumable {
         super("Yew Berry", 'x', true);
     }
 
-    @Override
-    public <T> Optional<T> asCapability(Class<T> capability) {
-        if (capability == Consumable.class) return Optional.of(capability.cast(this));
-        return super.asCapability(capability);
-    }
+
 
     /**
      * Defines the logic of being consumed

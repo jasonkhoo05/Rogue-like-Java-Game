@@ -1,6 +1,6 @@
 package edu.monash.fit2099.engine.positions;
 
-import edu.monash.fit2099.engine.GameEngineException;
+
 import edu.monash.fit2099.engine.GameEntity;
 import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
@@ -60,7 +60,7 @@ public abstract class Ground extends GameEntity implements Printable {
      *
      * @param location The location of the Ground
      */
-    public void tick(Location location)  {
+    public void tick(Location location){
     }
 
     /**
