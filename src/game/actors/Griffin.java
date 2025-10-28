@@ -56,7 +56,7 @@ public class Griffin extends MythicalCreature{
 
         // If no state yet, start at index 0
         if (currentState == null) {
-            currentType = statesListGriffin.getFirst();
+            currentType = statesListGriffin.get(0);
             currentState = createState(currentType);
             addStatus(currentState);
 
