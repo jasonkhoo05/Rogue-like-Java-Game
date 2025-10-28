@@ -87,7 +87,7 @@ public class Player extends Actor implements Dehydratable {
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
         display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
 
-        performMonologue();
+//        performMonologue();
 
         // return/print the console menu
         Menu menu = new Menu(actions);
@@ -196,9 +196,8 @@ public class Player extends Actor implements Dehydratable {
     }
 
     public void performMonologue() {
-        String prompt = "I am in a jungle,display one monologue an npc would say of how his day going (first person view)";
+        String prompt = "write me one short 20 word simple monologue an explorer will say and go next line if sentence has reach 10 words.";
         String text = monologueAI.generate(prompt);
         System.out.println(this + " says: " + text);
     }
-
 }
