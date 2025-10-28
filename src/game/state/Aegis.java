@@ -20,12 +20,12 @@ public class Aegis implements Status {
 
     @Override
     public void tickStatus(GameEntity currEntity, Location location) {
+        duration--;
         if (duration > 0) {
             currEntity.enableAbility(Ability.IMMUNITY);
         } else {
             currEntity.disableAbility(Ability.IMMUNITY);
         }
-        duration--;
     }
 
 
