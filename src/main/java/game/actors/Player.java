@@ -1,5 +1,6 @@
 package game.actors;
 
+import game.ai.Monologue;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
@@ -16,7 +17,6 @@ import game.status.DecreaseWarmth;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
-import game.behaviours.HealBehaviour;
 import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
 import edu.monash.fit2099.engine.positions.Location;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
  */
 public class Player extends Actor implements Dehydratable {
 
+    private final Monologue monologueAI;
     /**
      * Constructor.
      *
@@ -58,6 +59,7 @@ public class Player extends Actor implements Dehydratable {
         this.enableAbility(Ability.HEALABLE);
         this.enableAbility(Ability.IS_PLAYER);
 
+        this.monologueAI = new Monologue();
     }
 
     /**
@@ -84,6 +86,8 @@ public class Player extends Actor implements Dehydratable {
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
         display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
+
+        performMonologue();
 
         // return/print the console menu
         Menu menu = new Menu(actions);
@@ -190,4 +194,11 @@ public class Player extends Actor implements Dehydratable {
     public void dehydrate(int hydrationValue) {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, hydrationValue);
     }
+
+    public void performMonologue() {
+        String prompt = "I am in a jungle,display one monologue an npc would say of how his day going (first person view)";
+        String text = monologueAI.generate(prompt);
+        System.out.println(this + " says: " + text);
+    }
+
 }
