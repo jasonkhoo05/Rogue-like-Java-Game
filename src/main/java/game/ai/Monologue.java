@@ -1,4 +1,4 @@
-package ai;
+package game.ai;
 
 
 import com.google.genai.Client;

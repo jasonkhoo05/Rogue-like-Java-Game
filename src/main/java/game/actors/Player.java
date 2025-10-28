@@ -1,6 +1,6 @@
 package game.actors;
 
-import ai.Monologue;
+import game.ai.Monologue;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
@@ -17,7 +17,6 @@ import game.status.DecreaseWarmth;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
-import game.behaviours.HealBehaviour;
 import game.capabilities.Dehydratable;
 import game.weapons.BareFist;
 import edu.monash.fit2099.engine.positions.Location;
