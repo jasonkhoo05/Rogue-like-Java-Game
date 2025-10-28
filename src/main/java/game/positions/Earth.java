@@ -86,6 +86,7 @@ public class Earth extends World {
         this.addPlayer(this.player, gameMap.at(22, 5));
         gameMap.at(24,1).addActor(new Griffin("Griffin",'G',1000));
         gameMap.at(26,4).addActor(new Unicorn("Unicorn",'U',1000));
+        gameMap.at(1,8).addActor(new WiseMan("WiseMan",'☮',50));
 
 
         // ---------- REQ2: Tundra spawners ----------
