@@ -19,12 +19,13 @@ public class Vigor implements Status {
 
     @Override
     public void tickStatus(GameEntity currEntity, Location location) {
+        duration--;
         if (duration > 0) {
             currEntity.enableAbility(Ability.BOOST_DAMAGE);
         } else {
             currEntity.disableAbility(Ability.BOOST_DAMAGE);
         }
-        duration--;
+
     }
 
     @Override
