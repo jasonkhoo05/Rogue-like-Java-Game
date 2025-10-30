@@ -18,6 +18,11 @@ import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
+import game.positions.spawners.Swamp;          // new spawner type (~)
+import game.spawning.newborn.BearScatterYewEffect;
+import game.spawning.newborn.CrocodilePoisonAuraEffect;
+import game.spawning.newborn.DeerDropAppleEffect;
+import game.spawning.newborn.WolfGrowYewTreeEffect;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +53,8 @@ public class Earth extends World {
         groundCreator.registerGround('_', Tundra::new);
         groundCreator.registerGround('C', Cave::new);
         groundCreator.registerGround('w', Meadow::new);
+        groundCreator.registerGround('~', Swamp::new);  // swamp spawner
+
 
         player.addItemToInventory(new Bow());
         player.addItemToInventory(new Torch());
@@ -88,58 +95,127 @@ public class Earth extends World {
         gameMap.at(26,4).addActor(new Unicorn("Unicorn",'U',1000));
 
 
-        // ---------- REQ2: Tundra spawners ----------
-        // Forest tundra spawns BEARS (5% / tick, +10 HP via Tundra effect)
+        // -------- Cross-spawner context effects (apply to ALL spawners we create) --------
+        DeerDropAppleEffect deerDropApple = new DeerDropAppleEffect(msg -> display.println(msg)); // spawn an Apple on one exit when a Deer spawns
+        BearScatterYewEffect bearScatter = new BearScatterYewEffect(0.5, msg -> display.println(msg)); // each exit 50% chance to drop YewBerry when a Bear spawns
+        WolfGrowYewTreeEffect wolfGrowYew = new WolfGrowYewTreeEffect(msg -> display.println(msg)); // grow special YewBerry tree on one exit when a Wolf spawns
+        CrocodilePoisonAuraEffect crocPoisonNearby = new CrocodilePoisonAuraEffect(3, 10, display::print); // poison actors around spawner when a Croc spawns
+        // --------------------------------------------------------------------
+
+
+        // =========================
+        // A2/A3 SPAWNERS WIRING
+        // =========================
+
+        // ======================= TUNDRA =======================
+        // --- Forest: Tundra spawns BEARS (5%/tick, +10 HP via tundra effect)
         {
             Tundra tundraForest = new Tundra();
-            tundraForest.addFactory(() -> new game.actors.Bear("Bear", 'B', 200));
-            gameMap.at(6, 6).setGround(tundraForest);     // choose any empty tile
+            tundraForest.addContextEffect(deerDropApple);
+            tundraForest.addContextEffect(bearScatter);
+            tundraForest.addContextEffect(wolfGrowYew);
+            tundraForest.addContextEffect(crocPoisonNearby);
+            tundraForest.addFactory(() -> new Bear("Bear", 'B', 200));
+            gameMap.at(6, 6).setGround(tundraForest);
         }
 
-        // Plains tundra spawns WOLVES (5% / tick, +10 HP via Tundra effect)
+        // --- Plains: Tundra spawns WOLVES and (A3) CROCODILES, (5% chance each tick; tundra effect gives +10 HP)
         {
             Tundra tundraPlains = new Tundra();
-            tundraPlains.addFactory(() -> new game.actors.Wolf("Wolf", 'e', 100));
-            plainsMap.at(19, 3).setGround(tundraPlains);  // choose any empty tile
+            tundraPlains.addContextEffect(deerDropApple);
+            tundraPlains.addContextEffect(bearScatter);
+            tundraPlains.addContextEffect(wolfGrowYew);
+            tundraPlains.addContextEffect(crocPoisonNearby);
+            tundraPlains
+                    .addFactory(() -> new Wolf("Wolf", 'e', 100))
+                    .addFactory(() -> new Crocodile("Crocodile", '<', 300)); // A3
+            plainsMap.at(19, 3).setGround(tundraPlains);
         }
 
-        // ----- REQ2: Caves every 5 turns -----
-
-        // Forest cave: spawns Bear, Wolf, Deer (equal chance)
+        // ======================== CAVE ========================
+        // --- Forest: Cave spawns Bear/Wolf/Deer (every 5 turns)
         {
-            SpawnerGround caveForest;
-            caveForest = new Cave()
+            SpawnerGround caveForest = new Cave()
+                    .addContextEffect(deerDropApple)
+                    .addContextEffect(bearScatter)
+                    .addContextEffect(wolfGrowYew)
+                    .addContextEffect(crocPoisonNearby);
+            caveForest
                     .addFactory(() -> new Bear("Bear", 'B', 200))
                     .addFactory(() -> new Wolf("Wolf", 'e', 100))
                     .addFactory(() -> new Deer("Deer", 'd', 50));
             gameMap.at(17, 2).setGround(caveForest);
         }
 
-        // Plains cave: spawns Bear, Wolf (equal chance)
+        // --- Plains: Cave spawns Bear/Wolf (every 5 turns)
         {
-            SpawnerGround cavePlains;
-            cavePlains = new Cave()
+            SpawnerGround cavePlains = new Cave()
+                    .addContextEffect(deerDropApple)
+                    .addContextEffect(bearScatter)
+                    .addContextEffect(wolfGrowYew)
+                    .addContextEffect(crocPoisonNearby);
+            cavePlains
                     .addFactory(() -> new Bear("Bear", 'B', 200))
                     .addFactory(() -> new Wolf("Wolf", 'e', 100));
             plainsMap.at(7, 1).setGround(cavePlains);
         }
 
-        // -------- REQ2: Meadows (every 7 turns, 50% chance) --------
 
-        // Forest meadow: spawns DEERS
+        // ======================= MEADOW =======================
+        // --- Forest: Meadow spawns DEERS and (A3) CROCODILES (every 7 turns, 50%)
+        // (Meadow already applies ForagingEffect to newborns)
         {
-            var meadowForest = new Meadow()
-                    .addFactory(() -> new game.actors.Deer("Deer", 'd', 50));
-            // choose any empty tile coordinates
+            Meadow meadowForest = new Meadow();
+            meadowForest.addContextEffect(deerDropApple);
+            meadowForest.addContextEffect(bearScatter);
+            meadowForest.addContextEffect(wolfGrowYew);
+            meadowForest.addContextEffect(crocPoisonNearby);
+            meadowForest
+                    .addFactory(() -> new Deer("Deer", 'd', 50))
+                    .addFactory(() -> new Crocodile("Crocodile", '<', 300)); // A3 addition
             gameMap.at(30, 6).setGround(meadowForest);
         }
 
-        // Plains meadow: spawns DEERS and BEARS (equal chance)
+
+        // --- Plains: Meadow spawns DEERS and BEARS (unchanged)
         {
-            var meadowPlains = new Meadow()
-                    .addFactory(() -> new game.actors.Deer("Deer", 'd', 50))
-                    .addFactory(() -> new game.actors.Bear("Bear", 'B', 200));
+            Meadow meadowPlains = new Meadow();
+            meadowPlains.addContextEffect(deerDropApple);
+            meadowPlains.addContextEffect(bearScatter);
+            meadowPlains.addContextEffect(wolfGrowYew);
+            meadowPlains.addContextEffect(crocPoisonNearby);
+            meadowPlains
+                    .addFactory(() -> new Deer("Deer", 'd', 50))
+                    .addFactory(() -> new Bear("Bear", 'B', 200));
             plainsMap.at(4, 4).setGround(meadowPlains);
+        }
+
+        // ======================= SWAMP =======================
+        // Swamp (~): if an actor is in surrounding tiles, 50% chance to spawn.
+        // Newborn animals poisoned for 10 turns @ 5 dmg/turn (handled inside Swamp via PoisonNewbornEffect).
+        // --- Forest: Swamp spawns Crocodiles & Deer (50% if an actor nearby; newborn poisoned 10t x5)
+        {
+            Swamp swampForest = new Swamp();
+            swampForest.addContextEffect(deerDropApple);
+            swampForest.addContextEffect(bearScatter);
+            swampForest.addContextEffect(wolfGrowYew);
+            swampForest.addContextEffect(crocPoisonNearby);
+            swampForest
+                    .addFactory(() -> new Crocodile("Crocodile", '<', 300))
+                    .addFactory(() -> new Deer("Deer", 'd', 50));
+            gameMap.at(10, 3).setGround(swampForest);
+        }
+
+        // --- Plains: Swamp spawns ONLY Crocodiles (same poison-on-spawn)
+        {
+            Swamp swampPlains = new Swamp();
+            swampPlains.addContextEffect(deerDropApple);
+            swampPlains.addContextEffect(bearScatter);
+            swampPlains.addContextEffect(wolfGrowYew);
+            swampPlains.addContextEffect(crocPoisonNearby);
+            swampPlains
+                    .addFactory(() -> new Crocodile("Crocodile", '<', 300));
+            plainsMap.at(12, 2).setGround(swampPlains);
         }
 
 

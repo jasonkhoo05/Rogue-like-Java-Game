@@ -18,6 +18,7 @@ public enum Ability {
     IMMUNITY,
     BOOST_DAMAGE,
     IS_PLAYER,
-    WEAPON_ITEM,
-    RANGED_WEAPON
+    RANGED_WEAPON,
+
+
 }
