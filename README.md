@@ -23,7 +23,7 @@
      it maintains the current state.
      
      Changing state order:
-     1. Angry (50 %) - Reduce player hydration level by 3 + 1 (1 is from default hydration reduction) 
-     2. Sleepy (100 %)- Sleep for random amount of turns
-     3. Desiccation (60 %)- Become hostile and attack animals and player
+     1. Angry (50 %) - Become hostile and attack animals and player
+     2. Sleepy (100 %) - Sleep for random amount of turns
+     3. Desiccation (60 %) - Reduce player hydration level by 3 + 1 (1 is from default hydration reduction)  
 ```
