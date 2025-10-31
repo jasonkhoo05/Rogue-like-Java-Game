@@ -9,7 +9,6 @@ import game.positions.trees.ProximityYewBerryTree;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 /**

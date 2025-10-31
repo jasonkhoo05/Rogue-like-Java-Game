@@ -4,7 +4,7 @@ package game.positions.spawners;
 
 import edu.monash.fit2099.engine.positions.Location;
 import game.spawning.ChanceEachTurnPolicy;
-import game.spawning.newborn.PoisonOnSpawnEffect;
+import game.spawning.PoisonOnSpawnEffect;
 
 /**
  * Swamp '~'

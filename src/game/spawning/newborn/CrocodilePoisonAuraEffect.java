@@ -4,8 +4,6 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.Location;
 import game.Species;
 import game.status.Poisoned;
-import game.spawning.newborn.SpawnContextEffect;
-
 import java.util.function.Consumer;
 
 /**

@@ -5,10 +5,9 @@ import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.Location;
 import game.Species;
 import game.items.YewBerry;
-import game.spawning.newborn.SpawnContextEffect;
+
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 /**
