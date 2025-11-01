@@ -3,6 +3,7 @@ package game.actors;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import game.Ability;
+import game.Species;
 import game.behaviours.FightAlongSideBehaviour;
 import game.behaviours.FollowBehaviour;
 import game.behaviours.HostileBehaviour;
@@ -25,6 +26,7 @@ public class Wolf extends Animal {
         this.behaviours.put(999, new WanderBehaviour());
 
         this.enableAbility(Ability.CAN_ATTACK);
+        this.enableAbility(Species.WOLF);
     }
 
     /**

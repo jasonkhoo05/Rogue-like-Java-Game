@@ -9,6 +9,7 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.Ability;
+import game.Species;
 import game.actions.AttackAction;
 import game.actions.TameAction;
 import game.behaviours.CollectBehaviour;
@@ -29,8 +30,9 @@ public class Deer extends Animal {
      * @param hitPoints   the Actor's starting hit points
      */
     public Deer(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints, 10);
+        super(name, displayChar, hitPoints, 100);
         this.behaviours.put(999, new WanderBehaviour());
+        this.enableAbility(Species.DEER);
     }
 
 
