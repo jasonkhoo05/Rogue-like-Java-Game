@@ -42,8 +42,14 @@ public class Griffin extends MythicalCreature{
         changeState(this, display);
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
-            if(action != null)
+            if(action != null){
+                if (this.hasStatus(game.status.MovementLocked.class)
+                        && game.actions.meta.MovementActions.isMovement(action)) {
+                    display.println(this + " is stunned by lightning and cannot move!");
+                    return new DoNothingAction();
+                }
                 return action;
+            }
         }
         return new DoNothingAction();
     }
