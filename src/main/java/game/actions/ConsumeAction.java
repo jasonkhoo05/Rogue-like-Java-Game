@@ -72,8 +72,6 @@ public class ConsumeAction extends Action {
                     .ifPresent(journalCap -> journalCap.getRecipeJournal().addRecipe(newRecipe));
 
             recipeMessage = actor + " discovers a new recipe: " + newRecipe;
-
-            recipeMessage = actor + " discovers a new recipe: " + newRecipe;
         }
 
 //        // Engine prints the returned string
