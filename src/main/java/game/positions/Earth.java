@@ -31,12 +31,19 @@ import game.positions.trees.stages.YewBerrySapling;
 import game.items.magicalOrbs.HeatResistantOrb;
 import game.items.magicalOrbs.RegenerativeOrb;
 import game.items.magicalOrbs.SpeedOrb;
+import game.weather.WeatherSystem;
+import game.weather.WeatherType;
+import game.weather.effects.HeatwaveEffect;
+import game.weather.effects.StormEffect;
+import game.weather.effects.SunnyEffect;
+import game.weather.effects.TornadoEffect;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class Earth extends World {
     private final Player player;
+    final WeatherSystem weatherSystem;
 
     /**
      * Constructor
@@ -46,6 +53,12 @@ public class Earth extends World {
     public Earth(Display display, Player player) {
         super(display);
         this.player = player;
+        this.weatherSystem = new WeatherSystem()
+                .register(WeatherType.SUNNY,    new SunnyEffect().bindDisplay(display))
+                .register(WeatherType.HEATWAVE, new HeatwaveEffect().bindDisplay(display))
+                .register(WeatherType.STORM,    new StormEffect().bindDisplay(display))
+                .register(WeatherType.TORNADO,  new TornadoEffect().bindDisplay(display))
+                .setAnnouncer(display);
     }
 
     /**
@@ -303,5 +316,19 @@ public class Earth extends World {
         catch (GameEngineException exception){
             display.println(exception.getMessage());
         }
+    }
+
+    @Override
+    protected void gameLoop() throws GameEngineException {
+        // each map tick independently
+        for (GameMap map : gameMaps) {
+            map.tick();
+        }
+
+        // Weather system: Only ticks once per round – using the map the player is currently on.
+        GameMap playersMap = actorLocations.locationOf(player).map();
+        weatherSystem.tick(playersMap);
+
+        super.gameLoop();
     }
 }
