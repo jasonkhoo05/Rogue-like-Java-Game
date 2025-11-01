@@ -13,6 +13,8 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.Ability;
+import game.capabilities.HasRecipeJournal;
+import game.items.RecipeJournal;
 import game.status.DecreaseWarmth;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
@@ -30,9 +32,9 @@ import java.util.ArrayList;
  * Class representing the Player.
  * @author Adrian Kristanto
  */
-public class Player extends Actor implements Dehydratable {
+public class Player extends Actor implements Dehydratable, HasRecipeJournal {
 
-    private final Monologue monologueAI;
+    private final RecipeJournal journal = new RecipeJournal();
     /**
      * Constructor.
      *
@@ -59,7 +61,6 @@ public class Player extends Actor implements Dehydratable {
         this.enableAbility(Ability.HEALABLE);
         this.enableAbility(Ability.IS_PLAYER);
 
-        this.monologueAI = new Monologue();
     }
 
     /**
@@ -195,9 +196,8 @@ public class Player extends Actor implements Dehydratable {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, hydrationValue);
     }
 
-    public void performMonologue() {
-        String prompt = "write me one short 20 word simple monologue an explorer will say and go next line if sentence has reach 10 words.";
-        String text = monologueAI.generate(prompt);
-        System.out.println(this + " says: " + text);
+    @Override
+    public RecipeJournal getRecipeJournal() {
+        return journal;
     }
 }
