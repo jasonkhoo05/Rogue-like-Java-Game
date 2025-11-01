@@ -8,6 +8,7 @@ import edu.monash.fit2099.engine.positions.DefaultGroundCreator;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.World;
 import game.actors.*;
+import game.items.RecipeJournal;
 import game.items.weapons.Bow;
 import game.positions.spawners.Cave;
 import game.positions.spawners.Meadow;
@@ -73,7 +74,7 @@ public class Earth extends World {
         this.player.addItemToInventory(new SpeedOrb());
         this.player.addItemToInventory(new HeatResistantOrb());
         this.player.addItemToInventory(new RegenerativeOrb());
-
+        player.addItemToInventory(new RecipeJournal());
 
         List<String> map = Arrays.asList(
                 "........................................",
