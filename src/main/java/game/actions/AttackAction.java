@@ -2,9 +2,12 @@ package game.actions;
 
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.AttackTracker;
+import game.status.HeatEmpowered;
+import game.status.StatusEffects;
 
 /**
  * This class is copied from the demo
@@ -65,6 +68,10 @@ public class AttackAction extends Action {
         String result = weapon.attack(actor, target, map);
         AttackTracker.recordAttack(actor, this);
 
+        if (actor.hasStatus(HeatEmpowered.class)) {
+            StatusEffects.addBurn(target, 5, 5);
+            new Display().println(target + " is set ablaze by the scorching heat!");
+        }
         if (!target.isConscious()) {
             result += "\n" + target.unconscious(actor, map);
         }
