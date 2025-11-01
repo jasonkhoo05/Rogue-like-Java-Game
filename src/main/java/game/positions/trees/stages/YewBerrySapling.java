@@ -22,10 +22,21 @@ public class YewBerrySapling extends Tree {
     private static final double GROW_PROB = 0.5;
     private static final int PLAINS_FRUIT_EVERY = 2;
 
-    private final Random rng = new Random();
+    private final Random rng;
 
+    /**
+     * Default constructor (production use) — uses a real Random for natural randomness.
+     */
     public YewBerrySapling() {
+        this(new Random());
+    }
+
+    /**
+     * Deterministic constructor (testing use) — inject your own Random.
+     */
+    public YewBerrySapling(Random rng) {
         super(DISPLAY, NAME);
+        this.rng = rng;
     }
 
     @Override
@@ -42,10 +53,17 @@ public class YewBerrySapling extends Tree {
 
         // Probabilistic growth every 3 turns
         if (every(CHECK_EVERY)) {
-            if (rng.nextDouble() < GROW_PROB) {
+            if (decideToGrow()) {
                 location.setGround(new YewBerryTree());
             }
         }
+    }
+
+    /**
+     * Encapsulated growth decision — allows deterministic testing.
+     */
+    protected boolean decideToGrow() {
+        return rng.nextDouble() < GROW_PROB;
     }
 
     private void spawnYewBerry(Location location) {
