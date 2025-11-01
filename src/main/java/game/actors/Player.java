@@ -1,5 +1,6 @@
 package game.actors;
 
+import game.actions.meta.MovementActions;
 import game.ai.Monologue;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
@@ -16,6 +17,7 @@ import game.Ability;
 import game.capabilities.HasRecipeJournal;
 import game.items.RecipeJournal;
 import game.status.DecreaseWarmth;
+import game.status.MovementLocked;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
@@ -84,6 +86,17 @@ public class Player extends Actor implements Dehydratable, HasRecipeJournal {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
 
         addRangedAttackOptions(actions, map);
+
+        if (this.hasStatus(MovementLocked.class)) {
+            ActionList filtered = new ActionList();
+            for (Action a : actions) {
+                if (MovementActions.isMovement(a)) continue;
+                filtered.add(a);
+            }
+            actions = filtered;
+            display.println(this + " is stunned by lightning and cannot move!");
+        }
+
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
         display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
