@@ -6,8 +6,12 @@ import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import game.Ability;
 import game.ai.RecipeGenerator;
+import game.capabilities.HasRecipeJournal;
+import game.items.RecipeJournal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -15,6 +19,7 @@ import static org.mockito.Mockito.*;
 
 
 public class ConsumeActionTest {
+
 
     private GameMap mockMap;
     private RecipeGenerator mockRecipeGenerator;
@@ -35,37 +40,49 @@ public class ConsumeActionTest {
         when(mockLocation.getItems()).thenReturn(new java.util.ArrayList<>()); // safe empty list
     }
 
+
     @Test
     void testRecipeGeneratedWhenActorIsPlayer() {
-        // Actor has IS_PLAYER ability
-        Actor player = new FakeActor(true);
+        // Fake player actor
+        FakeActor player = new FakeActor(true);
 
-        // Mock recipe generator output
+        // Stub recipe generation
         when(mockRecipeGenerator.generateRecipe("TestBerry")).thenReturn("MockRecipe: Berry Soup");
 
-        ConsumeAction consumeAction = new ConsumeAction(testItem, mockRecipeGenerator);
-        String result = consumeAction.execute(player, mockMap);
+        // Create ConsumeAction with mocked generator
+        ConsumeAction action = new ConsumeAction(testItem, mockRecipeGenerator);
 
-        // Verify recipe generator called once
+        // Execute action
+        String result = action.execute(player, mockMap);
+
+        // Verify recipe generator called
         verify(mockRecipeGenerator, times(1)).generateRecipe("TestBerry");
 
-        // Ensure both parts of message are included
+        // Verify recipe is in the journal
+        RecipeJournal journal = player.getRecipeJournal();
+        assertTrue(journal.hasRecipe("MockRecipe: Berry Soup"));
+
+        // Verify returned message contains both parts
         assertTrue(result.contains("Item consumed."));
         assertTrue(result.contains("discovers a new recipe: MockRecipe: Berry Soup"));
     }
 
+
     @Test
     void testRecipeNotGeneratedWhenActorIsNotPlayer() {
-        Actor player = new FakeActor(false);
+        FakeActor npc = new FakeActor(false);
 
-        ConsumeAction consumeAction = new ConsumeAction(testItem, mockRecipeGenerator);
-        String result = consumeAction.execute(player, mockMap);
+        ConsumeAction action = new ConsumeAction(testItem, mockRecipeGenerator);
+        String result = action.execute(npc, mockMap);
 
-        // Verify recipe generator never called
+        // Verify generator never called
         verify(mockRecipeGenerator, never()).generateRecipe(anyString());
 
-        // Ensure recipe message is absent
-        assertFalse(result.contains("discovers a new recipe"));
+        // Journal should be empty
+        assertTrue(npc.getRecipeJournal().getRecipes().isEmpty());
+
+        // Message should still show consumed message
         assertTrue(result.contains("Item consumed."));
+        assertFalse(result.contains("discovers a new recipe"));
     }
 }
