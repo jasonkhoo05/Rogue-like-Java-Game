@@ -76,9 +76,22 @@ public class ConsumeAction extends Action {
             recipeMessage = actor + " discovers a new recipe: " + newRecipe;
         }
 
-        // Engine prints the returned string
-        String finalMessage = announce.isEmpty() ? result : (announce + "\n" + result);
-        return finalMessage;
+//        // Engine prints the returned string
+//        String finalMessage = announce.isEmpty() ? result : (announce + "\n" + result);
+//        return finalMessage;
+
+
+        // Build final message
+        StringBuilder finalMessage = new StringBuilder();
+        if (!announce.isEmpty()) {
+            finalMessage.append(announce).append("\n");
+        }
+        finalMessage.append(result);
+        if (!recipeMessage.isEmpty()) {
+            finalMessage.append("\n").append(recipeMessage);
+        }
+
+        return finalMessage.toString();
     }
 
     /**
