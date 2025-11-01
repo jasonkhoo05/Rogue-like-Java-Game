@@ -22,7 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
+/**
+ * A Unicorn is a mythical creature that cycles through three different magical states:
+ * RADIANT, AEGIS, and VIGOR. Each state lasts for a few turns and provides different
+ * effects or buffs to the Player. The Unicorn also performs behaviours such as healing
+ * or wandering depending on its current state.
+ */
 public class Unicorn extends MythicalCreature {
     public Map<Integer, Behaviour> behaviours = new TreeMap<>();
     private Status currentState = null;
@@ -30,6 +35,14 @@ public class Unicorn extends MythicalCreature {
     private Player player;
     List<StatusTypeUnicorn> statesList = new ArrayList<>();
 
+    /**
+     * Creates a Unicorn with the given name, display character, and hit points.
+     * Initial behaviours include wandering and healing.
+     *
+     * @param name        the name of the Unicorn
+     * @param displayChar the character used to represent the Unicorn on the map
+     * @param hitPoints   the starting hit points of the Unicorn
+     */
     public Unicorn(String name, char displayChar, int hitPoints) {
         super(name, displayChar, hitPoints);
         this.behaviours.put(999, new WanderBehaviour());
@@ -43,6 +56,13 @@ public class Unicorn extends MythicalCreature {
 
     }
 
+    /**
+     * Performs the Unicorn's behaviour each turn. The Unicorn changes state when needed and
+     * applies effects to the Player depending on the current state. It then performs a behaviour
+     * such as healing or wandering.
+     *
+     * @return the chosen action for this turn
+     */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 
@@ -87,7 +107,10 @@ public class Unicorn extends MythicalCreature {
         return new DoNothingAction();
     }
 
-
+    /**
+     * Changes the Unicorn's state once the current state expires.
+     * The Unicorn cycles through RADIANT → AEGIS → VIGOR with a chance to move to the next state.
+     */
     @Override
     public void changeState(Actor actor, Display display) {
         if (statesList.isEmpty()) return;
@@ -135,6 +158,9 @@ public class Unicorn extends MythicalCreature {
         display.println("Unicorn transformed to " + currentType + " state!");
     }
 
+    /**
+     * Creates the matching Status object for the given Unicorn state type.
+     */
     private Status createState(StatusTypeUnicorn type) {
         return switch (type) {
             case RADIANT -> new Radiant(3);
@@ -143,6 +169,10 @@ public class Unicorn extends MythicalCreature {
         };
     }
 
+    /**
+     * Updates behaviours based on the Unicorn's current state.
+     * RADIANT adds healing behaviour, while others keep basic wandering.
+     */
     private void applyStateBehaviours(StatusTypeUnicorn type, Display display) {
         this.behaviours.clear();
         switch (type) {
