@@ -38,7 +38,7 @@ public class RecipeGenerator {
      * @return a {@link String} containing the AI-generated recipe
      */
     public String generateRecipe(String itemName) {
-        String prompt = "Generate one short real survival recipe using " + itemName + ".";
+        String prompt = "Generate one short real survival recipe(only include name, ingredients and short step to cook) using " + itemName + ".";
         GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash", prompt, null);
         return response.text();
     }
