@@ -27,7 +27,9 @@ import game.spawning.newborn.WolfGrowYewTreeEffect;
 
 import game.positions.trees.stages.AppleSprout;
 import game.positions.trees.stages.YewBerrySapling;
-
+import game.items.magicalOrbs.HeatResistantOrb;
+import game.items.magicalOrbs.RegenerativeOrb;
+import game.items.magicalOrbs.SpeedOrb;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,9 +65,15 @@ public class Earth extends World {
         groundCreator.registerGround('~', Swamp::new);  // swamp spawner
 
 
+
+
         player.addItemToInventory(new Bow());
         player.addItemToInventory(new Torch());
         player.addItemToInventory(new Axe());
+        this.player.addItemToInventory(new SpeedOrb());
+        this.player.addItemToInventory(new HeatResistantOrb());
+        this.player.addItemToInventory(new RegenerativeOrb());
+
 
         List<String> map = Arrays.asList(
                 "........................................",
