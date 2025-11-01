@@ -41,10 +41,20 @@ public class ReadJournalAction extends Action {
 
             // Use TalkAction to produce the AI opinion
             TalkAction commentAction = new TalkAction(talkable, randomRecipe);
-            comment = "\n" + commentAction.execute(actor, map);
+            comment = "\n" +  executeTalkAction(actor, map, randomRecipe);
         }
 
         return journalContent + comment;
+    }
+
+    protected String executeTalkAction(Actor actor, GameMap map, String recipe) {
+        Talkable talkable = (prompt) -> {
+            String aiPrompt = "Write one short 20-word opinion an explorer would say about the food: " + prompt;
+            return monologueAI.generate(aiPrompt);
+        };
+
+        TalkAction commentAction = new TalkAction(talkable, recipe);
+        return commentAction.execute(actor, map);
     }
 
 
