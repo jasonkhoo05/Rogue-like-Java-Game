@@ -18,11 +18,16 @@ import game.items.weapons.Torch;
 import game.positions.trees.AppleTree;
 import game.positions.trees.HazelnutTree;
 import game.positions.trees.YewBerryTree;
+
 import game.positions.spawners.Swamp;          // new spawner type (~)
 import game.spawning.newborn.BearScatterYewEffect;
 import game.spawning.newborn.CrocodilePoisonAuraEffect;
 import game.spawning.newborn.DeerDropAppleEffect;
 import game.spawning.newborn.WolfGrowYewTreeEffect;
+
+import game.positions.trees.stages.AppleSprout;
+import game.positions.trees.stages.YewBerrySapling;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,9 +52,11 @@ public class Earth extends World {
     public void constructWorld() throws Exception {
         DefaultGroundCreator groundCreator = new DefaultGroundCreator();
         groundCreator.registerGround('.', Snow::new);
-        groundCreator.registerGround('T', AppleTree::new);
+        //groundCreator.registerGround('T', AppleTree::new);
+        groundCreator.registerGround('T', AppleSprout::new);
         groundCreator.registerGround('A', HazelnutTree::new);
-        groundCreator.registerGround('Y', YewBerryTree::new);
+        //groundCreator.registerGround('Y', YewBerryTree::new);
+        groundCreator.registerGround('Y', YewBerrySapling::new);
         groundCreator.registerGround('_', Tundra::new);
         groundCreator.registerGround('C', Cave::new);
         groundCreator.registerGround('w', Meadow::new);
@@ -94,6 +101,9 @@ public class Earth extends World {
         gameMap.at(24,1).addActor(new Griffin("Griffin",'G',1000));
         gameMap.at(26,4).addActor(new Unicorn("Unicorn",'U',1000));
         gameMap.at(1,8).addActor(new WiseMan("WiseMan",'☮',50));
+
+        plainsMap.at(10, 2).setGround(new AppleSprout());
+        plainsMap.at(15, 5).setGround(new YewBerrySapling());
 
 
         // -------- Cross-spawner context effects (apply to ALL spawners we create) --------

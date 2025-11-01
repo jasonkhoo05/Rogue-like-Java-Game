@@ -37,4 +37,12 @@ public abstract class Tree extends Ground {
     public void tick(Location location) {
         counter += 1;
     }
+
+    protected int age() {
+        return counter;
+    }
+
+    protected boolean every(int n) {
+        return n > 0 && (counter % n == 0);
+    }
 }
