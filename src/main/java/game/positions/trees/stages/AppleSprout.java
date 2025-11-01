@@ -17,7 +17,7 @@ import java.util.Random;
 public class AppleSprout extends Tree {
     private static final char DISPLAY = ',';
     private static final String NAME = "Wild Apple Sprout";
-    private static final int GROW_AFTER = 4;
+    private static final int GROW_AFTER = 3;
 
     private final Random rng = new Random();
 
