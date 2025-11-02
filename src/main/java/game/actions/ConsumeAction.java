@@ -6,20 +6,23 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import game.Ability;
+import game.ai.RecipeGenerator;
 import game.capabilities.Consumable;
+import game.capabilities.HasRecipeJournal;
 
 public class ConsumeAction extends Action {
     private final Item item;
+    private final RecipeGenerator recipeGenerator;
 
 
-    /**
-     * Constructor
-     *
-     * @param
-     */
     public ConsumeAction(Item item) {
-        this.item = item;
+        this(item, new RecipeGenerator());
+    }
 
+    // Test-friendly constructor
+    public ConsumeAction(Item item, RecipeGenerator recipeGenerator) {
+        this.item = item;
+        this.recipeGenerator = recipeGenerator;
     }
 
     /**
@@ -57,8 +60,36 @@ public class ConsumeAction extends Action {
                     actor, here.x(), here.y(), item
             );
         }
-        // Engine prints the returned string
-        return announce.isEmpty() ? result : (announce + "\n" + result);
+        String recipeMessage = "";
+
+        // Only generate recipe if actor is the player
+        if (actor.hasAbility(Ability.IS_PLAYER)) {
+            String newRecipe = recipeGenerator.generateRecipe(item.toString());
+
+
+            // Safely add recipe to journal if actor has the capability
+            actor.asCapability(HasRecipeJournal.class)
+                    .ifPresent(journalCap -> journalCap.getRecipeJournal().addRecipe(newRecipe));
+
+            recipeMessage = actor + " discovers a new recipe: " + newRecipe;
+        }
+
+//        // Engine prints the returned string
+//        String finalMessage = announce.isEmpty() ? result : (announce + "\n" + result);
+//        return finalMessage;
+
+
+        // Build final message
+        StringBuilder finalMessage = new StringBuilder();
+        if (!announce.isEmpty()) {
+            finalMessage.append(announce).append("\n");
+        }
+        finalMessage.append(result);
+        if (!recipeMessage.isEmpty()) {
+            finalMessage.append("\n").append(recipeMessage);
+        }
+
+        return finalMessage.toString();
     }
 
     /**

@@ -1,5 +1,6 @@
 package game.actors;
 
+import game.actions.meta.MovementActions;
 import game.ai.Monologue;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
@@ -13,7 +14,10 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.Ability;
+import game.capabilities.HasRecipeJournal;
+import game.items.RecipeJournal;
 import game.status.DecreaseWarmth;
+import game.status.MovementLocked;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actors.attributes.PlayerAttribute;
@@ -30,9 +34,9 @@ import java.util.ArrayList;
  * Class representing the Player.
  * @author Adrian Kristanto
  */
-public class Player extends Actor implements Dehydratable {
+public class Player extends Actor implements Dehydratable, HasRecipeJournal {
 
-    private final Monologue monologueAI;
+    private final RecipeJournal journal = new RecipeJournal();
     /**
      * Constructor.
      *
@@ -59,7 +63,6 @@ public class Player extends Actor implements Dehydratable {
         this.enableAbility(Ability.HEALABLE);
         this.enableAbility(Ability.IS_PLAYER);
 
-        this.monologueAI = new Monologue();
     }
 
     /**
@@ -83,6 +86,17 @@ public class Player extends Actor implements Dehydratable {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, 1);
 
         addRangedAttackOptions(actions, map);
+
+        if (this.hasStatus(MovementLocked.class)) {
+            ActionList filtered = new ActionList();
+            for (Action a : actions) {
+                if (MovementActions.isMovement(a)) continue;
+                filtered.add(a);
+            }
+            actions = filtered;
+            display.println(this + " is stunned by lightning and cannot move!");
+        }
+
         display.println(this.toString());
         display.println("HYDRATION: " + this.getAttribute(PlayerAttribute.HYDRATION));
         display.println("WARMTH: " + this.getAttribute(PlayerAttribute.WARMTH));
@@ -195,9 +209,8 @@ public class Player extends Actor implements Dehydratable {
         this.modifyAttribute(PlayerAttribute.HYDRATION, ActorAttributeOperation.DECREASE, hydrationValue);
     }
 
-    public void performMonologue() {
-        String prompt = "write me one short 20 word simple monologue an explorer will say and go next line if sentence has reach 10 words.";
-        String text = monologueAI.generate(prompt);
-        System.out.println(this + " says: " + text);
+    @Override
+    public RecipeJournal getRecipeJournal() {
+        return journal;
     }
 }

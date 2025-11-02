@@ -95,9 +95,11 @@ public final class StatusEffects {
 
         @Override
         public void tick(Actor actor, GameMap map) {
-            actor.hurt(damagePerTurn);
-            System.out.println(actor + " is burned, losing " + damagePerTurn + " HP.");
-            remaining--;
+            if (!actor.hasStatus(HeatResistant.class)) {
+                actor.hurt(damagePerTurn);
+                System.out.println(actor + " is burned, losing " + damagePerTurn + " HP.");
+                remaining--;
+            }
         }
 
         @Override

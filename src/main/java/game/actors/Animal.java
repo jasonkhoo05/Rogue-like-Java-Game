@@ -14,6 +14,8 @@ import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.Ability;
 import game.actions.RangedAttackAction;
+import game.actions.meta.MovementActions;
+import game.status.MovementLocked;
 import game.status.StatusEffects;
 import game.actions.AttackAction;
 import game.actions.NaturalDeathAction;
@@ -85,8 +87,16 @@ public abstract class Animal extends Actor implements Tameable, BehaviourHost {
 
         for (Behaviour behaviour : behaviours.values()) {
             Action action = behaviour.generateAction(this, map);
-            if(action != null)
+            if (action != null) {
+
+                // "No movement" condition after being struck by lightning
+                if (this.hasStatus(MovementLocked.class) && MovementActions.isMovement(action)) {
+                    display.println(this + " is stunned by lightning and cannot move!");
+                    return new DoNothingAction();
+                }
+
                 return action;
+            }
         }
         return new DoNothingAction();
     }
