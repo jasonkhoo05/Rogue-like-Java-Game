@@ -10,9 +10,16 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Wild Apple Sprout (","), stage 1.
- * Forest: no fruit; after 3 turns -> AppleSapling.
- * Plains: fruit every turn; after 3 turns -> AppleTree (skip sapling).
+ * Represents the first growth stage of a Wild Apple Tree.
+ *
+ * Display Character: ','
+ *
+ * Behaviour:
+ * - On Forest maps: does not produce fruit and becomes AppleSapling after 3 turns
+ * - On Plains maps: produces fruit every turn and becomes AppleTree after 3 turns (skips sapling)
+ * - Blocks movement and thrown objects
+ *
+ * Author: Daffa Arrazy
  */
 public class AppleSprout extends Tree {
     private static final char DISPLAY = ',';
@@ -24,6 +31,11 @@ public class AppleSprout extends Tree {
     public AppleSprout() {
         super(DISPLAY, NAME);
     }
+
+    /**
+     * Applies map-specific fruiting rules and determines stage transition.
+     * @param location map location of the sprout
+     */
 
     @Override
     public void tick(Location location) {
@@ -47,6 +59,10 @@ public class AppleSprout extends Tree {
             }
         }
     }
+
+    /**
+     * Spawns an apple in a random adjacent tile.
+     */
 
     private void spawnApple(Location location, boolean everyTurn) {
         if (!everyTurn) return;

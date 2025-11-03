@@ -10,8 +10,16 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Wild Apple Sapling ("t"), stage 2.
- * Fruits every 2 turns; after 5 turns -> AppleTree.
+ * Represents the second growth stage of a Wild Apple Tree.
+ *
+ * Display Character: 't'
+ *
+ * Behaviour:
+ * - Fruits every 2 turns (regardless of map type)
+ * - After 5 turns of age, becomes an AppleTree
+ * - Blocks movement and thrown objects
+ *
+ * Author: Daffa Arrazy
  */
 public class AppleSapling extends Tree {
     private static final char DISPLAY = 't';
@@ -21,9 +29,18 @@ public class AppleSapling extends Tree {
 
     private final Random rng = new Random();
 
+    /**
+     * Constructs the sapling instance.
+     */
+
     public AppleSapling() {
         super(DISPLAY, NAME);
     }
+
+    /**
+     * Handles fruiting and stage transition.
+     * @param location location of the sapling on the map
+     */
 
     @Override
     public void tick(Location location) {
@@ -39,6 +56,10 @@ public class AppleSapling extends Tree {
             location.setGround(new AppleTree());
         }
     }
+
+    /**
+     * Spawns an apple in a random adjacent tile.
+     */
 
     private void spawnApple(Location location) {
         List<Exit> exits = location.getExits();

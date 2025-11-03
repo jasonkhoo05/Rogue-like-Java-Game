@@ -9,11 +9,19 @@ import game.positions.trees.YewBerryTree;
 import java.util.List;
 import java.util.Random;
 
+
 /**
- * Yew Berry Sapling ("b").
- * Any map: every 3 turns, 50% chance to grow to YewBerryTree.
- * Forest: no fruit at sapling stage.
- * Plains: fruit every 2 turns.
+ * Represents the sapling stage of a Yew Berry Tree.
+ *
+ * Display Character: 'b'
+ *
+ * Behaviour:
+ * - On Plains maps: produces fruit every 2 turns
+ * - On Forest maps: does not produce fruit
+ * - Every 3 turns, has a 50% chance to grow into YewBerryTree
+ * - Blocks movement and thrown objects
+ *
+ * Author: Daffa Arrazy
  */
 public class YewBerrySapling extends Tree {
     private static final char DISPLAY = 'b';
@@ -39,6 +47,11 @@ public class YewBerrySapling extends Tree {
         this.rng = rng;
     }
 
+    /**
+     * Handles fruiting and potential growth transition.
+     * @param location tile where this sapling exists
+     */
+
     @Override
     public void tick(Location location) {
         super.tick(location);
@@ -60,12 +73,16 @@ public class YewBerrySapling extends Tree {
     }
 
     /**
-     * Encapsulated growth decision — allows deterministic testing.
+     * Determines whether this sapling should mature.
+     * @return true if growth occurs this cycle
      */
     protected boolean decideToGrow() {
         return rng.nextDouble() < GROW_PROB;
     }
 
+    /**
+     * Spawns a Yew Berry fruit in a random adjacent tile.
+     */
     private void spawnYewBerry(Location location) {
         List<Exit> exits = location.getExits();
         if (exits.isEmpty()) return;
