@@ -12,15 +12,12 @@ import java.util.Random;
 
 /**
  * Represents the sapling stage of a Yew Berry Tree.
- *
  * Display Character: 'b'
- *
  * Behaviour:
  * - On Plains maps: produces fruit every 2 turns
  * - On Forest maps: does not produce fruit
  * - Every 3 turns, has a 50% chance to grow into YewBerryTree
  * - Blocks movement and thrown objects
- *
  * Author: Daffa Arrazy
  */
 public class YewBerrySapling extends Tree {
