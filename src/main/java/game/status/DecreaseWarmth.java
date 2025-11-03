@@ -5,6 +5,7 @@ import edu.monash.fit2099.engine.capabilities.Status;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.actors.attributes.ActorAttributeOperation;
 import edu.monash.fit2099.engine.actors.attributes.BaseAttributes;
+import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.Location;
 import game.actors.attributes.AnimalAttribute;
 import game.actors.attributes.PlayerAttribute;
@@ -15,6 +16,7 @@ import game.actors.attributes.PlayerAttribute;
  * Do NOT remove/print here — we delegate to playTurn + engine for printing/removal.
  */
 public class DecreaseWarmth implements Status {
+    private final Display display = new Display();
     @Override
     public void tickStatus(GameEntity entity, Location location) {
         // Control both animal and player's warmth here
@@ -31,7 +33,7 @@ public class DecreaseWarmth implements Status {
 
         if (warmthKey == null) return;
         a.modifyAttribute(warmthKey, ActorAttributeOperation.DECREASE, 1);
-        System.out.println(a + " feels cold!");
+        display.println(a + " feels cold!");
 
         if (a.getAttribute(warmthKey) <= 0) {
             a.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.UPDATE, 0);

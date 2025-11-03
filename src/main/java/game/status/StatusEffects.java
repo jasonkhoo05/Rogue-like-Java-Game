@@ -1,6 +1,7 @@
 package game.status;
 
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.actors.attributes.AnimalAttribute;
 import game.actors.attributes.PlayerAttribute;
@@ -11,6 +12,7 @@ import java.util.*;
  * Each effect runs independently and can stack.
  */
 public final class StatusEffects {
+    private static Display display = new Display();
     private StatusEffects() {}
 
     private static final Map<Actor, List<Effect>> registry = new WeakHashMap<>();
@@ -73,7 +75,7 @@ public final class StatusEffects {
         @Override
         public void tick(Actor actor, GameMap map) {
             actor.hurt(damagePerTurn);
-            System.out.println(actor + " bleeds for " + damagePerTurn + " damage.");
+            display.println(actor + " bleeds for " + damagePerTurn + " damage.");
             remaining--;
         }
 
@@ -97,7 +99,7 @@ public final class StatusEffects {
         public void tick(Actor actor, GameMap map) {
             if (!actor.hasStatus(HeatResistant.class)) {
                 actor.hurt(damagePerTurn);
-                System.out.println(actor + " is burned, losing " + damagePerTurn + " HP.");
+                display.println(actor + " is burned, losing " + damagePerTurn + " HP.");
                 remaining--;
             }
         }
@@ -119,7 +121,7 @@ public final class StatusEffects {
         @Override
         public void tick(Actor actor, GameMap map) {
             actor.hurt(damagePerTurn);
-            System.out.println(actor + " suffers " + damagePerTurn + " poison damage.");
+            display.println(actor + " suffers " + damagePerTurn + " poison damage.");
             remaining--;
         }
         @Override
