@@ -182,7 +182,6 @@ public class Player extends Actor implements Dehydratable, HasRecipeJournal {
     public void hurt(int damage) {
         // If the actor is immune (from Aegis), skip damage
         if (this.hasAbility(Ability.IMMUNITY)) {
-            System.out.println(this + " is shielded by Aegis and takes no damage!");
             return;
         }
         this.modifyAttribute(BaseAttributes.HEALTH, ActorAttributeOperation.DECREASE, damage);
@@ -197,10 +196,6 @@ public class Player extends Actor implements Dehydratable, HasRecipeJournal {
         } else {
             weapon = new BareFist();
         }
-
-        // DEBUG: print the type of weapon being returned
-        System.out.println(this + " intrinsic weapon is: " + weapon.getClass().getSimpleName());
-
         return weapon;
     }
 
