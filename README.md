@@ -74,6 +74,8 @@
      Assignment 3 Requirement 5
      =============================
      
+     Note: The AI feautures will take some time to load in the console when generating content.
+     
      Feature 1 – New NPC with monologue feature
         I will create a new NPC (WiseMan extends from Actor) that implements the Talkable interface, 
         along with a new TalkAction class.The NPC will deliver a monologue message generated from Monologue 
