@@ -27,8 +27,6 @@
      2. Sleepy (100 %) - Sleep for random amount of turns
      3. Desiccation (60 %) - Reduce player hydration level by 3 + 1 (1 is from default hydration reduction)  
      
-     
-    Assignment 3 Req 3 + 4:
      In this creative mode, the game world evolves dynamically with changing weather and environmental conditions that 
      directly influence gameplay.
      The player must adapt to unpredictable weather cycles such as rain, drought, storm, or heatwave, each of which 
@@ -70,8 +68,6 @@
      6) RegenerativeOrb: Restores 1 HP per turn for 5 turns after consumption. Ideal for long battles or survival under 
      damaging weather effects.
      
-     =============================
-     Assignment 3 Requirement 5
      =============================
      
      Note: The AI feautures will take some time to load in the console when generating content.
